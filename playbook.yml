@@ -18,76 +18,106 @@
       name: "{{ item }}"
       state: present
     with_list:
-      - tmux 
-      - neovim
-      - awscli
-      - fzf
-      - git
-      - git-lfs
-      - jq
-      - pipx
-      - mise
-      - ripgrep
+    - tmux 
+    - neovim
+    - awscli
+    - fzf
+    - git
+    - git-lfs
+    - jq
+    - pipx
+    - mise
+    - ripgrep
+
+
+- name: Pipx Installs
+  hosts: localhost
+  tasks:
+  - name: Install pipx tools
+    community.general.pipx:
+      executable: pipx
+      name: "{{ item }}"
+      state: present
+    with_list:
+      - poetry 
+      - black 
+      - isort
 
 
 - name: Setup Home Environment
   hosts: localhost
   tasks:
-    - name: Include main vars
-      ansible.builtin.include_vars:
-        file: vars.yml
-    - name: Setup env dotfile links
-      ansible.builtin.file:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: "{{ username }}"
-        mode: "0755"
-        state: link
-      loop:
-        - { src: "{{ playbook_dir }}/env/zshrc", dest: "{{ home }}/.zshrc" }
+  - name: Include main vars
+    ansible.builtin.include_vars:
+      file: vars.yml
+  - name: Setup env dotfile links
+    ansible.builtin.file:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ username }}"
+      mode: "0755"
+      state: link
+    loop:
+      - { src: "{{ playbook_dir }}/env/zshrc", dest: "{{ home }}/.zshrc" }
 
 
 - name: Setup Config
   hosts: localhost
   tasks:
-    - name: Find all files in env/config
-      ansible.builtin.find:
-        paths: "{{ playbook_dir }}/env/config"
-        file_type: any
-      register: config
-    - name: Create symlinks to ~/.config
-      ansible.builtin.file:
-        src: "{{ item.path }}"
-        path: "{{ home }}/.config/{{ item.path | basename }}"
-        owner: "{{ username }}"
-        mode: "0755"
-        state: link
-      with_items: "{{ config.files }}"
+  - name: Find all files in env/config
+    ansible.builtin.find:
+      paths: "{{ playbook_dir }}/env/config"
+      file_type: any
+    register: config
+  - name: Create symlinks to ~/.config
+    ansible.builtin.file:
+      src: "{{ item.path }}"
+      path: "{{ home }}/.config/{{ item.path | basename }}"
+      owner: "{{ username }}"
+      mode: "0755"
+      state: link
+    with_items: "{{ config.files }}"
+
+
+- name: Setup Share
+  hosts: localhost
+  tasks:
+  - name: Find all files in env/local/share
+    ansible.builtin.find:
+      paths: "{{ playbook_dir }}/env/local/share"
+      file_type: file
+    register: bin
+  - name: Create symlinks to ~/.local/share
+    ansible.builtin.file:
+      src: "{{ item.path }}"
+      path: "{{ home }}/.local/share/{{ item.path | basename }}"
+      owner: "{{ username }}"
+      state: link
+    with_items: "{{ bin.files }}"
 
 
 - name: Setup Bin
   hosts: localhost
   tasks:
-    - name: Find all files in env/local
-      ansible.builtin.find:
-        paths: "{{ playbook_dir }}/env/local/bin"
-        file_type: file
-      register: bin
-    - name: Create symlinks to ~/.config
-      ansible.builtin.file:
-        src: "{{ item.path }}"
-        path: "{{ home }}/.local/bin/{{ item.path | basename }}"
-        owner: "{{ username }}"
-        mode: "0755"
-        state: link
-      with_items: "{{ bin.files }}"
+  - name: Find all files in env/local/bin
+    ansible.builtin.find:
+      paths: "{{ playbook_dir }}/env/local/bin"
+      file_type: file
+    register: bin
+  - name: Create symlinks to ~/.local/bin
+    ansible.builtin.file:
+      src: "{{ item.path }}"
+      path: "{{ home }}/.local/bin/{{ item.path | basename }}"
+      owner: "{{ username }}"
+      state: link
+    with_items: "{{ bin.files }}"
 
 
 - name: Update Homebrew
   hosts: localhost
   tasks:
-    - name: Update
-      community.general.homebrew:
-        update_homebrew: true
-        upgrade_all: true
+  - name: Update
+    community.general.homebrew:
+      update_homebrew: true
+      upgrade_all: true
 
