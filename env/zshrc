@@ -1,0 +1,21 @@
+
+export PATH=/opt/homebrew/bin:$PATH
+export PATH=$PATH:/Users/kgoehner/.toolbox/bin:/Users/kgoehner/.rodar/bin
+
+
+export BRAZIL_PLATFORM_OVERRIDE=AL2012
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+alias ll="ls -la"
+
+# Set up rtx for runtime management
+eval "$(mise activate zsh)"
+
+# Created by `pipx` on 2024-01-03 14:03:30
+export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
+
+alias vim=nvim
+alias oldvim=vim
+
+# Brazil
+alias bb=brazil-build
