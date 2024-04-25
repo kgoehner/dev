@@ -42,6 +42,7 @@
       - git
       - git-lfs
       - jq
+      - libevent-devel
       state: present
     when: ansible_facts["os_family"] == "RedHat"
   - name: Download fzf
@@ -66,6 +67,24 @@
     ansible.builtin.shell:
       cmd: sh -s -- -y
       stdin: "{{ mise_installer.content }}"
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Download tmux
+    ansible.builtin.git:
+      repo: https://github.com/tmux/tmux.git
+      dest: build/tmux
+    environment:
+      GIT_TERMINAL_PROMPT: 0
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Install tmux
+    ansible.builtin.command:
+      cmd: "{{ item }}"
+    args:
+      chdir: build/tmux
+    with_items:
+    - sh autogen.sh
+    - ./configure --prefix {{ home }}/.local
+    - make
+    - make install
     when: ansible_facts["os_family"] == "RedHat"
 
 
