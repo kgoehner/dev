@@ -120,7 +120,6 @@
       state: link
     loop:
       - { src: "{{ playbook_dir }}/env/tmux.conf", dest: "{{ home }}/.tmux.conf" }
-    when: ansible_facts["os_family"] == "Darwin"
   - name: Setup OSX only env dotfile links
     ansible.builtin.file:
       src: "{{ item.src }}"
