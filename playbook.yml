@@ -44,15 +44,15 @@
       - jq
       state: present
     when: ansible_facts["os_family"] == "RedHat"
-  - name: Install FZF
+  - name: Download fzf
     ansible.builtin.git:
       repo: https://github.com/junegunn/fzf.git
       dest: build/fzf
     environment:
       GIT_TERMINAL_PROMPT: 0
     when: ansible_facts["os_family"] == "RedHat"
-  - name: Change the working directory to somedir/ before executing the command
-    ansible.builtin.shell: install >> install.txt
+  - name: Install fzf
+    ansible.builtin.shell: ./install >> install.txt
     args:
       chdir: build/fzf
     when: ansible_facts["os_family"] == "RedHat"
