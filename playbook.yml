@@ -28,6 +28,45 @@
     - pipx
     - mise
     - ripgrep
+    when: ansible_facts["os_family"] == "Darwin"
+
+
+- name: Linux Installs
+  hosts: localhost
+  tasks:
+  - name: Yum Installs
+    ansible.builtin.yum:
+      name:
+      - tmux
+      - awscli
+      - git
+      - git-lfs
+      - jq
+      state: present
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Install FZF
+    ansible.builtin.git:
+      repo: https://github.com/junegunn/fzf.git
+      dest: build/fzf
+    environment:
+      GIT_TERMINAL_PROMPT: 0
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Change the working directory to somedir/ before executing the command
+    ansible.builtin.shell: install >> install.txt
+    args:
+      chdir: build/fzf
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Fetch mise
+    ansible.builtin.uri:
+      url: https://mise.run
+      return_content: yes
+    register: mise_installer
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Run mise installer
+    ansible.builtin.shell:
+      cmd: sh -s -- -y
+      stdin: "{{ mise_installer.content }}"
+    when: ansible_facts["os_family"] == "RedHat"
 
 
 - name: Pipx Installs
@@ -59,6 +98,7 @@
       state: link
     loop:
       - { src: "{{ playbook_dir }}/env/zshrc", dest: "{{ home }}/.zshrc" }
+    when: ansible_facts["os_family"] == "Darwin"
 
 
 - name: Setup Config
@@ -120,4 +160,5 @@
     community.general.homebrew:
       update_homebrew: true
       upgrade_all: true
+    when: ansible_facts["os_family"] == "Darwin"
 

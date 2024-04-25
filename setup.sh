@@ -1,20 +1,30 @@
 #!/bin/bash
 set -e
 
-# Install or update Homebrew
-# https://brew.sh/
-which -s brew
-if [[ $? != 0 ]] ; then
-    # Install Homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    set -x
+    python3 -m pip install --user pipx
+    python3 -m pipx ensurepath
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Install or update Homebrew
+    # https://brew.sh/
+    which -s brew
+    if [[ $? != 0 ]] ; then
+        # Install Homebrew
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    else
+        brew update
+    fi
+
+    set -x
+
+    # Install pipx
+    brew install pipx
 else
-    brew update
+    echo "Unsupported OS type: $OSTYPE"
+    exit 1
 fi
 
-set -x
-
-# Install pipx
-brew install pipx
 pipx ensurepath
 
 # Install Ansible
