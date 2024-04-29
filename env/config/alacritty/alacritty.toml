@@ -1,0 +1,21 @@
+import = [
+    "~/.config/alacritty/solarized_light.toml"
+]
+
+[window]
+dimensions = { columns = 250, lines = 50 }
+padding = { x = 0, y = 0 }
+decorations = "Full"
+
+opacity = 0.95
+
+decorations_theme_variant = "None"
+
+resize_increments = true
+
+[font]
+normal = { family = "Monaco", style = "Regular" }
+size = 12
+
+[debug]
+render_timer = false

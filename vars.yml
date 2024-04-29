@@ -1,2 +1,2 @@
-username: "kgoehner"
+username: "{{ lookup('ansible.builtin.env', 'USER') }}"
 home: "{{ lookup('ansible.builtin.env', 'HOME') }}"

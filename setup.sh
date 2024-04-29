@@ -27,8 +27,18 @@ fi
 
 pipx ensurepath
 
+# Update Path
+source ~/.zshrc
+
 # Install Ansible
 pipx install --include-deps ansible
 
 # Clone Setup Repo
-git clone https://github.com/Kazz47/dev.git
+dir_name=$(basename "$PWD")
+if [[ $dir_name != "dev" ]]; then
+    git clone https://github.com/Kazz47/dev.git
+    cd dev
+fi
+
+# Run playbook
+ansible-playbook -i inventory.ini playbook.yml

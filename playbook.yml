@@ -91,6 +91,17 @@
     when: ansible_facts["os_family"] == "RedHat"
 
 
+- name: Mise Installs
+  hosts: localhost
+  tasks:
+  - name: Install NPM
+    ansible.builtin.command:
+      cmd: "mise use -g node"
+  - name: Install Python
+    ansible.builtin.command:
+      cmd: "mise use -g python"
+
+
 - name: Pipx Installs
   hosts: localhost
   tasks:
@@ -120,6 +131,13 @@
       state: link
     loop:
       - { src: "{{ playbook_dir }}/env/tmux.conf", dest: "{{ home }}/.tmux.conf" }
+  - name: Remove OSX only dotfiles
+    ansible.builtin.file:
+      path: "{{ item }}"
+      state: absent
+    loop:
+      - "{{ home }}/.zshrc"
+    when: ansible_facts["os_family"] == "Darwin"
   - name: Setup OSX only env dotfile links
     ansible.builtin.file:
       src: "{{ item.src }}"
@@ -193,3 +211,47 @@
       upgrade_all: true
     when: ansible_facts["os_family"] == "Darwin"
 
+
+- name: Rust
+  hosts: localhost
+  tags:
+    - rust
+  tasks:
+  - name: Check if cargo is installed
+    ansible.builtin.shell: command -v cargo
+    register: cargo_exists
+    ignore_errors: yes
+  - name: Download Installer
+    when: cargo_exists is failed
+    get_url:
+      url: https://sh.rustup.rs
+      dest: /tmp/sh.rustup.rs
+      mode: '0755'
+      force: 'yes'
+  - name: Install Cargo
+    when: cargo_exists is failed
+    ansible.builtin.shell: /tmp/sh.rustup.rs
+
+
+- name: Alacritty
+  hosts: localhost
+  tasks:
+  - name: Download Alacrity
+    ansible.builtin.git:
+      repo: https://github.com/alacritty/alacritty.git
+      dest: build/alacritty
+  - name: Build Alacrity
+    ansible.builtin.command:
+      cmd: "cargo build --release"
+    args:
+      chdir: build/alacritty
+  - name: Package App
+    ansible.builtin.command:
+      cmd: "make app"
+    args:
+      chdir: build/alacritty
+  - name: Copy to Applications
+    ansible.builtin.command:
+      cmd: "cp -r target/release/osx/Alacritty.app /Applications/"
+    args:
+      chdir: build/alacritty
