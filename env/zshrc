@@ -17,5 +17,8 @@ export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
 alias vim=nvim
 alias oldvim=vim
 
+# Python
+alias activate="source .venv/bin/activate"
+
 # Brazil
 alias bb=brazil-build

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+set -x
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    workprefix = "workplaces"
+    workprefix="workplaces"
 else
-    workprefix = "workspaces"
+    workprefix="workspaces"
 fi
 
 if [[ $# -eq 1 ]]; then
@@ -26,6 +27,11 @@ fi
 
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
     tmux new-session -ds $selected_name -c $selected
+fi
+
+if [[ -z $TMUX ]] && [[ $tmux_running ]]; then
+    tmux attach -t $selected_name
+    exit 0
 fi
 
 tmux switch-client -t $selected_name
