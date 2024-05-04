@@ -1,5 +1,8 @@
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
+-- Previous buffer
+vim.keymap.set("n", "<C-6>", "<C-^>")
+
 -- Center cursor
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
@@ -25,7 +28,7 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagn
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
--- Quickfix keymapssjfd
+-- Quickfix keymaps
 vim.keymap.set('n', '<C-x>', "<cmd>cnext<CR>zz", { desc = 'Go to next quickfix item' })
 vim.keymap.set('n', '<C-c>', "<cmd>cprev<CR>zz", { desc = 'Go to previous quickfix item' })
 

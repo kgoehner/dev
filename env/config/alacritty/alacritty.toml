@@ -17,5 +17,11 @@ resize_increments = true
 normal = { family = "Hack Nerd Font Mono", style = "Regular" }
 size = 12
 
+[keyboard]
+bindings = [
+    { key = "6", mods = "Control", action = "ReceiveChar" }  # Allow C-6 for switching to the previous Vim buffer.
+]
+
+
 [debug]
 render_timer = false
