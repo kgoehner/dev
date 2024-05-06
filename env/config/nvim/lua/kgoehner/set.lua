@@ -6,6 +6,10 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
+-- Status and Tab Bar
+vim.opt.laststatus = 2
+vim.opt.showtabline = 2
+
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
