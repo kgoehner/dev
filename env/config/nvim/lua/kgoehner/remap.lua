@@ -1,7 +1,7 @@
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 -- Previous buffer
-vim.keymap.set("n", "<C-6>", "<C-^>")
+--vim.keymap.set("n", "<C-6>", "<C-^>")
 
 -- Center cursor
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
