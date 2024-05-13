@@ -1,5 +1,5 @@
 import = [
-    "~/.config/alacritty/solarized_light.toml"
+    "~/.config/alacritty/solarized_dark.toml"
 ]
 
 [window]
@@ -7,7 +7,7 @@ dimensions = { columns = 150, lines = 50 }
 padding = { x = 0, y = 0 }
 decorations = "Full"
 
-opacity = 0.95
+opacity = 1
 
 dynamic_title = true
 decorations_theme_variant = "None"
