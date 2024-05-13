@@ -7,6 +7,8 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 -- Status and Tab Bar
+vim.opt.title = true
+vim.opt.titlestring = [[%f %h%m%r%w %{v:progname}]]
 vim.opt.laststatus = 2
 vim.opt.showtabline = 2
 
