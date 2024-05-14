@@ -60,6 +60,24 @@
     args:
       chdir: build/fzf
     when: ansible_facts["os_family"] == "RedHat"
+  - name: Fetch ripgrep
+    ansible.builtin.git:
+      repo: https://github.com/BurntSushi/ripgrep
+      dest: build/ripgrep
+    environment:
+      GIT_TERMINAL_PROMPT: 0
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Install ripgrep
+    ansible.builtin.shell: cargo build --release
+    args:
+      chdir: build/ripgrep
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Copy ripgrep to bin
+    ansible.builtin.command:
+      cmd: "cp -r target/release/rg ../../env/local/bin/"
+    args:
+      chdir: build/ripgrep
+    when: ansible_facts["os_family"] == "RedHat"
   - name: Fetch mise
     ansible.builtin.uri:
       url: https://mise.run
@@ -97,6 +115,7 @@
   - name: Install NPM
     ansible.builtin.command:
       cmd: "mise use -g node"
+    when: ansible_facts["os_family"] == "Darwin"
   - name: Install Python
     ansible.builtin.command:
       cmd: "mise use -g python"
@@ -221,7 +240,7 @@
       force: 'yes'
   - name: Install Cargo
     when: cargo_exists is failed
-    ansible.builtin.shell: /tmp/sh.rustup.rs
+    ansible.builtin.shell: /tmp/sh.rustup.rs -y
 
 
 - name: Alacritty
@@ -231,18 +250,22 @@
     ansible.builtin.git:
       repo: https://github.com/alacritty/alacritty.git
       dest: build/alacritty
+    when: ansible_facts["os_family"] == "Darwin"
   - name: Build Alacrity
     ansible.builtin.command:
       cmd: "cargo build --release"
     args:
       chdir: build/alacritty
+    when: ansible_facts["os_family"] == "Darwin"
   - name: Package App
     ansible.builtin.command:
       cmd: "make app"
     args:
       chdir: build/alacritty
+    when: ansible_facts["os_family"] == "Darwin"
   - name: Copy to Applications
     ansible.builtin.command:
       cmd: "cp -r target/release/osx/Alacritty.app /Applications/"
     args:
       chdir: build/alacritty
+    when: ansible_facts["os_family"] == "Darwin"
