@@ -28,6 +28,7 @@
     - pipx
     - mise
     - ripgrep
+    - tokei
     when: ansible_facts["os_family"] == "Darwin"
 
 
