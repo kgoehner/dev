@@ -29,6 +29,8 @@
     - mise
     - ripgrep
     - tokei
+    - luarocks
+    - wget
     when: ansible_facts["os_family"] == "Darwin"
 
 

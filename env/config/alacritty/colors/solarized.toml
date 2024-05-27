@@ -1,9 +1,4 @@
-# Colors (Solarized Light)
-
-# Default colors
-[colors.primary]
-background = '#fdf6e3'
-foreground = '#586e75'
+# Colors (Solarized)
 
 # Normal colors
 [colors.normal]
