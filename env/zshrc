@@ -13,6 +13,15 @@ eval "$(mise activate zsh)"
 # Created by `pipx` on 2024-01-03 14:03:30
 export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
 
+# FZF
+source <(fzf --zsh)
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAFEHIST=$HISTSIZE
+
+
 alias vim=nvim
 alias oldvim=vim
 
