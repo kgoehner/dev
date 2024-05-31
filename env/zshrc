@@ -31,5 +31,8 @@ alias activate="source .venv/bin/activate"
 # Brazil
 alias bb=brazil-build
 
+# Zoxide
+eval "$(zoxide init --cmd cd zsh)"
+
 # Starship
 eval "$(starship init zsh)"

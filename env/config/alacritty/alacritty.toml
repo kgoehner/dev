@@ -1,15 +1,17 @@
 import = [
     "~/.config/alacritty/colors/solarized_light.toml"
 ]
+[env]
+TERM = "xterm-256color"
 
 [window]
 dimensions = { columns = 150, lines = 50 }
-padding = { x = 0, y = 0 }
-decorations = "Full"
+padding = { x = 0, y = 10 }
+decorations = "Buttonless"
 
-opacity = 1
+opacity = 0.8
+blur = true
 
-dynamic_title = true
 decorations_theme_variant = "None"
 
 resize_increments = true
@@ -23,7 +25,6 @@ size = 12
 bindings = [
     { key = "6", mods = "Control", action = "ReceiveChar" }  # Allow C-6 for switching to the previous Vim buffer.
 ]
-
 
 [debug]
 render_timer = false

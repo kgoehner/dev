@@ -24,6 +24,7 @@
     - fzf
     - git
     - git-lfs
+    - bat
     - jq
     - yq
     - pipx
@@ -34,6 +35,8 @@
     - wget
     - fd
     - xh
+    - zoxide
+    - koekeishiya/formulae/yabai
     when: ansible_facts["os_family"] == "Darwin"
 
 
