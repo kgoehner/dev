@@ -37,6 +37,7 @@
     - xh
     - zoxide
     - koekeishiya/formulae/yabai
+    - koekeishiya/formulae/skhd
     when: ansible_facts["os_family"] == "Darwin"
 
 

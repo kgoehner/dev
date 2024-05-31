@@ -1,0 +1,21 @@
+# Change Window Focus
+
+alt - j : yabai -m window --focus south
+alt - k : yabai -m window --focus north
+alt - h : yabai -m window --focus west
+alt - l : yabai -m window --focus east
+
+# Modify Layout
+shift + alt - r : yabai -m space --rotate 270
+shift + alt - y : yabai -m space --mirror y-axis 
+shift + alt - x : yabai -m space --mirror x-axis
+shift + alt - t : yabai -m space --toggle float --grid 4:4:1:1:2:2
+
+# Modify Window Size
+shift + alt - m : yabai -m window --toggle zoom-fullscreen
+shift + alt - e : yabai -m space --balance
+
+# Yabai stop/start/restart
+ctrl + alt - q : yabai --stop-service
+ctrl + alt - s : yabai --start-service
+ctrl + alt - r : yabai --restart-servic
