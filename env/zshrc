@@ -11,7 +11,7 @@ alias ll="ls -la"
 eval "$(mise activate zsh)"
 
 # Created by `pipx` on 2024-01-03 14:03:30
-export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
+export PATH="$PATH:$HOME/.local/bin:$HOME/bin:$HOME/go/bin"
 
 # FZF
 source <(fzf --zsh)
@@ -36,3 +36,6 @@ eval "$(zoxide init --cmd cd zsh)"
 
 # Starship
 eval "$(starship init zsh)"
+
+# Init ZSH Autocomplete
+autoload -Uz compinit && compinit
