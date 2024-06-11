@@ -57,7 +57,6 @@
       - git-lfs
       - jq
       - libevent-devel
-      - xh
       state: present
     when: ansible_facts["os_family"] == "RedHat"
   - name: Download fzf
@@ -118,6 +117,36 @@
     - ./configure --prefix {{ home }}/.local
     - make
     - make install
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Download bat
+    ansible.builtin.git:
+      repo: https://github.com/sharkdp/bat.git
+      dest: build/bat
+    environment:
+      GIT_TERMINAL_PROMPT: 0
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Install bat
+    ansible.builtin.command:
+      cmd: "{{ item }}"
+    args:
+      chdir: build/bat
+    with_items:
+    - cargo install --locked bat
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Download xh
+    ansible.builtin.git:
+      repo: https://github.com/ducaale/xh.git
+      dest: build/xh
+    environment:
+      GIT_TERMINAL_PROMPT: 0
+    when: ansible_facts["os_family"] == "RedHat"
+  - name: Install xh
+    ansible.builtin.command:
+      cmd: "{{ item }}"
+    args:
+      chdir: build/xh
+    with_items:
+    - cargo install --locked xh
     when: ansible_facts["os_family"] == "RedHat"
 
 
