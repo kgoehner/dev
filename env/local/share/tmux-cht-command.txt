@@ -35,3 +35,7 @@ stow
 chmod
 chown
 make
+xh
+bat
+curl
+fzf

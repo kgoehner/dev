@@ -150,6 +150,17 @@
     when: ansible_facts["os_family"] == "RedHat"
 
 
+- name: TPM (tmux plugin manager)
+  hosts: localhost
+  tasks:
+  - name: Download TPM
+    ansible.builtin.git:
+      repo: https://github.com/tmux-plugins/tpm.git
+      dest: env/config/tmux/plugins/tpm
+    environment:
+      GIT_TERMINAL_PROMPT: 0
+
+
 - name: Mise Installs
   hosts: localhost
   tasks:

@@ -18,4 +18,4 @@ shift + alt - e : yabai -m space --balance
 # Yabai stop/start/restart
 ctrl + alt - q : yabai --stop-service
 ctrl + alt - s : yabai --start-service
-ctrl + alt - r : yabai --restart-servic
+ctrl + alt - r : yabai --restart-service
