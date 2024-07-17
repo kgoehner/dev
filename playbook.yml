@@ -29,6 +29,7 @@
     - yq
     - pipx
     - mise
+    - hatch
     - ripgrep
     - tokei
     - luarocks
@@ -39,6 +40,8 @@
     - starship
     - koekeishiya/formulae/yabai
     - koekeishiya/formulae/skhd
+    - ffmpeg
+    - gifsicle
     when: ansible_facts["os_family"] == "Darwin"
 
 
@@ -182,6 +185,7 @@
       name: "{{ item }}"
       state: present
     with_list:
+      - hatch
       - poetry 
       - black 
       - isort
