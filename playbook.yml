@@ -24,6 +24,7 @@
     - fzf
     - git
     - git-lfs
+    - gitleaks
     - bat
     - jq
     - yq
@@ -38,6 +39,7 @@
     - xh
     - zoxide
     - starship
+    - stow
     - koekeishiya/formulae/yabai
     - koekeishiya/formulae/skhd
     - ffmpeg
