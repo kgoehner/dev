@@ -29,10 +29,12 @@
     - jq
     - yq
     - pipx
+    - midnight-commander
     - mise
     - hatch
     - ripgrep
     - tokei
+    - todo-txt
     - luarocks
     - wget
     - fd
@@ -44,6 +46,7 @@
     - koekeishiya/formulae/skhd
     - ffmpeg
     - gifsicle
+    - sqlite
     when: ansible_facts["os_family"] == "Darwin"
 
 
@@ -56,12 +59,13 @@
   - name: Yum Installs
     ansible.builtin.yum:
       name:
-      - tmux
       - awscli
       - git
       - git-lfs
       - jq
       - libevent-devel
+      - mc
+      - tmux
       state: present
     when: ansible_facts["os_family"] == "RedHat"
   - name: Download fzf
