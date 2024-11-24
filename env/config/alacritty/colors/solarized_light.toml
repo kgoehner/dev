@@ -1,6 +1,5 @@
 # Colors (Solarized Light)
-
-import = [
+general.import = [
     "~/.config/alacritty/colors/solarized.toml"
 ]
 

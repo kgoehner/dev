@@ -1,6 +1,5 @@
 # Colors (Gruvbox Light)
-
-import = [
+general.import = [
     "~/.config/alacritty/colors/gruvbox.toml"
 ]
 

@@ -39,3 +39,7 @@ eval "$(starship init zsh)"
 
 # Init ZSH Autocomplete
 autoload -Uz compinit && compinit
+
+export PATH="/Applications/Fortify/Fortify_SCA_24.2.0/bin:$PATH"
+
+export PATH="/Applications/Fortify/Fortify_Apps_and_Tools_24.2.0/bin:$PATH"

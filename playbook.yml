@@ -1,19 +1,9 @@
 # ansible-playbook -i inventory.ini playbook.yml
 ---
-- name: My first play
+- name: Homebrew Installs
   hosts: localhost
   tasks:
-  - name: Ping my hosts
-    ansible.builtin.ping:
-  - name: Print message
-    ansible.builtin.debug:
-      msg: Hello world
-
-
-- name: Homebrew Installs 
-  hosts: localhost
-  tasks:
-  - name: Brew Installs 
+  - name: Brew Installs
     community.general.homebrew:
       name: "{{ item }}"
       state: present
@@ -47,6 +37,13 @@
     - ffmpeg
     - gifsicle
     - sqlite
+    when: ansible_facts["os_family"] == "Darwin"
+  - name: Brew Cask Installs
+    community.general.homebrew_cask:
+      name: "{{ item }}"
+      state: present
+    with_list:
+    - nikitabobko/tap/aerospace
     when: ansible_facts["os_family"] == "Darwin"
 
 
@@ -219,6 +216,7 @@
       state: link
     loop:
       - { src: "{{ playbook_dir }}/env/zshrc", dest: "{{ home }}/.zshrc" }
+      - { src: "{{ playbook_dir }}/env/aerospace.toml", dest: "{{ home }}/.aerospace.toml" }
     when: ansible_facts["os_family"] == "Darwin"
 
 
