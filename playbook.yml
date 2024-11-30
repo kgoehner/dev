@@ -3,12 +3,19 @@
 - name: Homebrew Installs
   hosts: localhost
   tasks:
+  - name: Tap Repository
+    community.general.homebrew_tap:
+      name: "{{ item }}"
+      state: present
+    with_list:
+    - FelixKratz/formulae
+    when: ansible_facts["os_family"] == "Darwin"
   - name: Brew Installs
     community.general.homebrew:
       name: "{{ item }}"
       state: present
     with_list:
-    - tmux 
+    - tmux
     - neovim
     - awscli
     - fzf
@@ -31,9 +38,8 @@
     - xh
     - zoxide
     - starship
+    - borders  # From FelixKratz/formulae
     - stow
-    - koekeishiya/formulae/yabai
-    - koekeishiya/formulae/skhd
     - ffmpeg
     - gifsicle
     - sqlite

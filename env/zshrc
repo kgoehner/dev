@@ -37,6 +37,11 @@ eval "$(zoxide init --cmd cd zsh)"
 # Starship
 eval "$(starship init zsh)"
 
+# Aerospace Window Search
+function sw() {
+    aerospace list-windows --all | fzf --bind 'enter:execute(bash -c "aerospace focus --window-id {1}")+abort'
+}
+
 # Init ZSH Autocomplete
 autoload -Uz compinit && compinit
 
