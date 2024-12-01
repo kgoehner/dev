@@ -1,0 +1,49 @@
+export PATH=/opt/homebrew/bin:$PATH
+export PATH=$PATH:/Users/kgoehner/.toolbox/bin:/Users/kgoehner/.rodar/bin
+
+export BRAZIL_PLATFORM_OVERRIDE=AL2012
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+alias ll="ls -la"
+
+# Set up rtx for runtime management
+eval "$(mise activate zsh)"
+
+# Created by `pipx` on 2024-01-03 14:03:30
+export PATH="$PATH:$HOME/.local/bin:$HOME/bin:$HOME/go/bin"
+
+# FZF
+source <(fzf --zsh)
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAFEHIST=$HISTSIZE
+
+
+alias vim=nvim
+alias oldvim=vim
+
+# Python
+alias activate="source .venv/bin/activate"
+
+# Brazil
+alias bb=brazil-build
+
+# Zoxide
+eval "$(zoxide init --cmd cd zsh)"
+
+# Starship
+eval "$(starship init zsh)"
+
+# Aerospace Window Search
+function sw() {
+    aerospace list-windows --all | fzf --bind 'enter:execute(bash -c "aerospace focus --window-id {1}")+abort'
+}
+
+# Init ZSH Autocomplete
+autoload -Uz compinit && compinit
+
+export PATH="/Applications/Fortify/Fortify_SCA_24.2.0/bin:$PATH"
+
+export PATH="/Applications/Fortify/Fortify_Apps_and_Tools_24.2.0/bin:$PATH"
