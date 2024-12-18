@@ -4,7 +4,7 @@ return {
   main = 'nvim-treesitter.configs',
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
   opts = {
-    ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'rust', 'python' },
+    ensure_installed = { 'bash', 'c', 'cpp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'rust', 'python', 'json', 'cmake', 'dockerfile', 'dot', 'go', 'java', 'latex', 'regex', 'toml' },
     auto_install = true,
     highlight = {
       enable = true,

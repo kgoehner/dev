@@ -7,7 +7,7 @@ value="$3"
 
 window_size=60%
 
-valid_commands="[ get, describe, logs, connect, delete, port-forward, stop-port-forward ]"
+valid_commands="[ get, describe, logs, connect, delete, port-forward, stop-port-forward, scale ]"
 
 if [[ -z $command ]]; then
     echo "Command is required: $valid_commands"
@@ -15,7 +15,8 @@ if [[ -z $command ]]; then
 fi
 
 # AWS Profile for EKS
-export AWS_PROFILE=eks_scientist
+export AWS_PROFILE=scientist
+#export AWS_PROFILE=mm_scientist
 
 set_resource () {
     # Search for a k8s resource by name
@@ -49,7 +50,7 @@ set_values () {
 confirm() {
     # Confirm a command for things that might be dangerous to automatically execute
     echo -n "Do you want to run '$*'? [N/y] "
-    read -N 1 reply
+    read -n 1 reply
     echo
     if test "$reply" = "y" -o "$reply" = "Y"; then
         "$@"
@@ -80,6 +81,13 @@ case "$command" in
         for val in $values; do
             confirm kubectl delete --wait=false $resource $val
         done ;;
+    "scale")
+        resource="deployments"
+        set_values "Scale" $USER
+        echo -n "What do you want to scale to? "
+        read reply
+        echo -n "--replics=$reply $resource/$value"
+        kubectl scale --replicas=$reply $resource/$value ;;
     "port-forward" | "pf")
         resource="pods"
         set_values "Port-Forward" $USER
