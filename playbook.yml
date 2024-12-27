@@ -19,6 +19,7 @@
     - neovim
     - awscli
     - fzf
+    - ghostty
     - git
     - git-lfs
     - gitleaks

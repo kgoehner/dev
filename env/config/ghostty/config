@@ -1,0 +1,8 @@
+# Theme
+theme = light:GruvboxLight,dark:GruvboxDark
+
+# Font
+font-family = "Hack Nerd Font Mono"
+
+# Decoration
+macos-titlebar-style = hidden
