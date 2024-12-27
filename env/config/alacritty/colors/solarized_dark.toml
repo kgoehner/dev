@@ -1,9 +1,0 @@
-# Colors (Solarized Dark)
-general.import = [
-    "~/.config/alacritty/colors/solarized.toml"
-]
-
-# Default colors
-[colors.primary]
-background = '#002b36'
-foreground = '#839496'
