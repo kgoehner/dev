@@ -99,9 +99,9 @@ outer.right =      10
 #     activate
 # end tell'
 # '''
-alt-a = 'exec-and-forget open -a /Applications/Alacritty.app'
+alt-g = 'exec-and-forget open -a /Applications/Ghostty.app'
 alt-o = 'exec-and-forget open -a /Applications/Obsidian.app'
-alt-g = 'exec-and-forget open -a /Applications/Google\ Chrome.app'
+alt-c = 'exec-and-forget open -a /Applications/Google\ Chrome.app'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
