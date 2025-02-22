@@ -1,9 +1,18 @@
 return {
   "folke/snacks.nvim",
+  dependencies = {"lewis6991/gitsigns.nvim"},
+  priority = 1000,
+  lazy = false,
   ---@type snacks.Config
   opts = {
     notifier = { enabled = true },
-    statuscolumn = { enabled = true },
+    scope = { enabpled = true },
+    statuscolumn = {
+      enabled = true,
+      folds = {
+        git_hl = true,
+      },
+    },
     gitbrowse = {
       notify = true,
       remote_patterns = {
@@ -53,5 +62,28 @@ return {
     { "<leader>gl", function() Snacks.lazygit() end, desc = "Lazygit" },
     { "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit" },
     { "<leader>gL", function() Snacks.lazygit.log() end, desc = "Lazygit" },
-  }
+  },
+  init = function()
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "VeryLazy",
+      callback = function()
+        -- Setup some globals for debugging (lazy-loaded)
+        _G.dd = function(...)
+          Snacks.debug.inspect(...)
+        end
+        _G.bt = function()
+          Snacks.debug.backtrace()
+        end
+        vim.print = _G.dd -- Override print to use snacks for `:=` command
+
+        -- Create some toggle mappings
+        Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>tL")
+        Snacks.toggle.line_number():map("<leader>ul")
+        Snacks.toggle.inlay_hints():map("<leader>th")
+        Snacks.toggle.indent():map("<leader>tg")
+        Snacks.toggle.dim():map("<leader>tD")
+        Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>tb")
+      end,
+    })
+  end,
 }
