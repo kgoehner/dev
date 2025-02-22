@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/d08fbfbd13534c1e9607346c06bad55c/artifacts
+end_time: 1735773706758
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: d08fbfbd13534c1e9607346c06bad55c
+run_name: dashing-zebra-531
+run_uuid: d08fbfbd13534c1e9607346c06bad55c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735773706720
+status: 4
+tags: []
+user_id: kgoehner

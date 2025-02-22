@@ -8,6 +8,9 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 alias ll="ls -la"
 
+# Todo
+alias todo=todo.sh
+
 # Set up rtx for runtime management
 eval "$(mise activate zsh)"
 

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/8d7a53ba63e44974884a662cc84a263d/artifacts
+end_time: 1735788875262
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 8d7a53ba63e44974884a662cc84a263d
+run_name: amazing-swan-660
+run_uuid: 8d7a53ba63e44974884a662cc84a263d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735788875222
+status: 4
+tags: []
+user_id: kgoehner

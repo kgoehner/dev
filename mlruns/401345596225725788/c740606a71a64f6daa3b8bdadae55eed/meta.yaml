@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/c740606a71a64f6daa3b8bdadae55eed/artifacts
+end_time: 1735668364685
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: c740606a71a64f6daa3b8bdadae55eed
+run_name: amusing-sheep-107
+run_uuid: c740606a71a64f6daa3b8bdadae55eed
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735668364645
+status: 4
+tags: []
+user_id: kgoehner

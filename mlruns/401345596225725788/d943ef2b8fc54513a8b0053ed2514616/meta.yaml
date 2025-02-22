@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/d943ef2b8fc54513a8b0053ed2514616/artifacts
+end_time: 1735753389560
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: d943ef2b8fc54513a8b0053ed2514616
+run_name: overjoyed-cat-474
+run_uuid: d943ef2b8fc54513a8b0053ed2514616
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735753384842
+status: 3
+tags: []
+user_id: kgoehner

@@ -23,6 +23,8 @@ return {
         gopls = {},
         pyright = {},
         rust_analyzer = {},
+        ts_ls = {},
+        jdtls = {},
         lua_ls = {
           settings = {
             Lua = {

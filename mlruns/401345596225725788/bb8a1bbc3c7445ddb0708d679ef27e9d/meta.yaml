@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/bb8a1bbc3c7445ddb0708d679ef27e9d/artifacts
+end_time: 1735753577965
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: bb8a1bbc3c7445ddb0708d679ef27e9d
+run_name: aged-crow-679
+run_uuid: bb8a1bbc3c7445ddb0708d679ef27e9d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735753568761
+status: 4
+tags: []
+user_id: kgoehner

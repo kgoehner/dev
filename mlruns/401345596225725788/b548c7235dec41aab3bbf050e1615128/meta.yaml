@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/b548c7235dec41aab3bbf050e1615128/artifacts
+end_time: 1735790412732
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: b548c7235dec41aab3bbf050e1615128
+run_name: bouncy-hen-856
+run_uuid: b548c7235dec41aab3bbf050e1615128
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735790412688
+status: 4
+tags: []
+user_id: kgoehner

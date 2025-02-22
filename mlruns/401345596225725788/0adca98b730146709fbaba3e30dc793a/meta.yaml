@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/0adca98b730146709fbaba3e30dc793a/artifacts
+end_time: 1735758329736
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 0adca98b730146709fbaba3e30dc793a
+run_name: upset-sheep-730
+run_uuid: 0adca98b730146709fbaba3e30dc793a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735758320189
+status: 3
+tags: []
+user_id: kgoehner

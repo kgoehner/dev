@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/2a341772e5f4455e9e0e1e01713a6a7a/artifacts
+end_time: 1735751456307
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 2a341772e5f4455e9e0e1e01713a6a7a
+run_name: valuable-donkey-165
+run_uuid: 2a341772e5f4455e9e0e1e01713a6a7a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735751456272
+status: 4
+tags: []
+user_id: kgoehner

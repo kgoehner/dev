@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/4bb9d37c93e94b44a4697454db50e118/artifacts
+end_time: 1735773685376
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 4bb9d37c93e94b44a4697454db50e118
+run_name: big-shrimp-693
+run_uuid: 4bb9d37c93e94b44a4697454db50e118
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735773685337
+status: 4
+tags: []
+user_id: kgoehner

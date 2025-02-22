@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/7d335ad9a7254d4b946f4cc6bc909626/artifacts
+end_time: 1735753104807
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 7d335ad9a7254d4b946f4cc6bc909626
+run_name: loud-shrimp-660
+run_uuid: 7d335ad9a7254d4b946f4cc6bc909626
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735753100718
+status: 3
+tags: []
+user_id: kgoehner

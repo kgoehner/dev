@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/8edec6b8a76348c8ac0d4a03452146db/artifacts
+end_time: 1735668654849
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 8edec6b8a76348c8ac0d4a03452146db
+run_name: unruly-smelt-43
+run_uuid: 8edec6b8a76348c8ac0d4a03452146db
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735668654809
+status: 4
+tags: []
+user_id: kgoehner

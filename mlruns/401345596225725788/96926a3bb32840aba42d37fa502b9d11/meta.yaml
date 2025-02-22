@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/96926a3bb32840aba42d37fa502b9d11/artifacts
+end_time: 1735789791619
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 96926a3bb32840aba42d37fa502b9d11
+run_name: likeable-sheep-921
+run_uuid: 96926a3bb32840aba42d37fa502b9d11
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735789791577
+status: 4
+tags: []
+user_id: kgoehner

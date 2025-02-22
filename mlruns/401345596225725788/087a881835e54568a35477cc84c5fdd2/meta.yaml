@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/087a881835e54568a35477cc84c5fdd2/artifacts
+end_time: 1735789150190
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 087a881835e54568a35477cc84c5fdd2
+run_name: exultant-gnat-41
+run_uuid: 087a881835e54568a35477cc84c5fdd2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735789150147
+status: 4
+tags: []
+user_id: kgoehner

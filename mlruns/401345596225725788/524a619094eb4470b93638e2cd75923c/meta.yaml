@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/524a619094eb4470b93638e2cd75923c/artifacts
+end_time: 1735752315780
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 524a619094eb4470b93638e2cd75923c
+run_name: mysterious-sponge-56
+run_uuid: 524a619094eb4470b93638e2cd75923c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735752311681
+status: 3
+tags: []
+user_id: kgoehner

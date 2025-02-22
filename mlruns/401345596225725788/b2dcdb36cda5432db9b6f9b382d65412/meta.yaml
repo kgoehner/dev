@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/b2dcdb36cda5432db9b6f9b382d65412/artifacts
+end_time: 1735767405054
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: b2dcdb36cda5432db9b6f9b382d65412
+run_name: respected-flea-16
+run_uuid: b2dcdb36cda5432db9b6f9b382d65412
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735767405015
+status: 4
+tags: []
+user_id: kgoehner

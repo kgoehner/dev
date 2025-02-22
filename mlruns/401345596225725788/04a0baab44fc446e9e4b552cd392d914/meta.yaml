@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/04a0baab44fc446e9e4b552cd392d914/artifacts
+end_time: 1735788789333
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 04a0baab44fc446e9e4b552cd392d914
+run_name: skittish-crane-108
+run_uuid: 04a0baab44fc446e9e4b552cd392d914
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735788789292
+status: 4
+tags: []
+user_id: kgoehner

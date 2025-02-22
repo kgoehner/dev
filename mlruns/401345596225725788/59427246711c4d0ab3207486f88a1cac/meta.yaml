@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/59427246711c4d0ab3207486f88a1cac/artifacts
+end_time: 1735667982831
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 59427246711c4d0ab3207486f88a1cac
+run_name: rambunctious-auk-875
+run_uuid: 59427246711c4d0ab3207486f88a1cac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735667982796
+status: 3
+tags: []
+user_id: kgoehner

@@ -1,1 +1,0 @@
-return { "folke/drop.nvim" }

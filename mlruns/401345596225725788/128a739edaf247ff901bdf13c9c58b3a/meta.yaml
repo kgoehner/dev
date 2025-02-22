@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/128a739edaf247ff901bdf13c9c58b3a/artifacts
+end_time: 1735750147273
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 128a739edaf247ff901bdf13c9c58b3a
+run_name: selective-cod-872
+run_uuid: 128a739edaf247ff901bdf13c9c58b3a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735750147227
+status: 4
+tags: []
+user_id: kgoehner

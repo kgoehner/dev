@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/736b023eff9c4b08a61f7e16464a99d8/artifacts
+end_time: 1735668082379
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: 736b023eff9c4b08a61f7e16464a99d8
+run_name: magnificent-hog-626
+run_uuid: 736b023eff9c4b08a61f7e16464a99d8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735668082342
+status: 4
+tags: []
+user_id: kgoehner

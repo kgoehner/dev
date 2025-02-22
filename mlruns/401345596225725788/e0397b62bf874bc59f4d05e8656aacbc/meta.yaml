@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/401345596225725788/e0397b62bf874bc59f4d05e8656aacbc/artifacts
+end_time: 1735753592081
+entry_point_name: ''
+experiment_id: '401345596225725788'
+lifecycle_stage: active
+run_id: e0397b62bf874bc59f4d05e8656aacbc
+run_name: omniscient-grub-560
+run_uuid: e0397b62bf874bc59f4d05e8656aacbc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735753582704
+status: 3
+tags: []
+user_id: kgoehner
