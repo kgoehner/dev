@@ -1,0 +1,18 @@
+customCommands:
+  - key: o
+    description: Open or update a CR
+    context: localBranches,files,commits
+    prompts:
+      - type: input
+        title: Enter the URL of an existing revision (if applicable)
+        key: ExistingRevision
+      - type: input
+        title: Enter the name of the destination branch
+        key: DestinationBranch
+        initialValue: mainline
+        suggestions:
+          preset: branches
+    command: "cr {{if .Form.ExistingRevision}} --update-review {{.Form.ExistingRevision}} {{else}} --new-review {{end}} --parent $(git parent) --destination-branch {{.Form.DestinationBranch}}"
+    loadingText: "Creating CR revision"
+    showOutput: true
+    outputTitle: CR

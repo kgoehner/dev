@@ -19,6 +19,7 @@ return {
     vim.keymap.set("n", "<leader><leader>", fzf.buffers, { desc = "[ ] Find existing buffers" })
     vim.keymap.set("n", "<leader>/", fzf.blines, { desc = "[/] Fuzzily search in current buffer" })
     vim.keymap.set("n", "<leader>s/", fzf.live_grep, { desc = "[S]earch [/] in Open Files" })
+    vim.keymap.set("n", "<leader>sm", fzf.git_status, { desc = "[S]earch [M]odified Files" })
 
     -- Shortcut for searching your Neovim configuration files
     vim.keymap.set("n", "<leader>sn", function()
