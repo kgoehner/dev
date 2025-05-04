@@ -26,6 +26,7 @@ return {
         rust_analyzer = {},
         ts_ls = {},
         jdtls = {},
+        zk = {},
         lua_ls = {
           settings = {
             Lua = {
