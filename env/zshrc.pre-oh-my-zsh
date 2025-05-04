@@ -48,3 +48,12 @@ autoload -Uz compinit && compinit
 export PATH="/Applications/Fortify/Fortify_SCA_24.2.0/bin:$PATH"
 
 export PATH="/Applications/Fortify/Fortify_Apps_and_Tools_24.2.0/bin:$PATH"
+
+# Q Chat 
+function qlog() {
+    local timestamp=$(date +"%Y%m%d_%H%M%S")
+    local logfile="$HOME/q_chat_logs/q_chat_$timestamp.txt"
+    mkdir -p "$HOME/q_chat_logs"
+    script -q /dev/null $(which q) chat | tee "$logfile"
+    echo "Chat session saved to $logfile"
+}
