@@ -1,0 +1,46 @@
+---
+- name: Tap Repository
+  community.general.homebrew_tap:
+    name: "{{ item }}"
+    state: present
+  with_list:
+  - FelixKratz/formulae
+- name: Brew Installs
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+  with_list:
+  - ghostty
+  - borders  # From FelixKratz/formulae
+- name: Brew Cask Installs
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  with_list:
+  - nikitabobko/tap/aerospace
+
+
+- name: Include main vars
+  ansible.builtin.include_vars:
+    file: vars.yml
+- name: Remove OSX only dotfiles
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ home }}/.zshrc"
+    - "{{ home }}/.zshrc.pre-oh-my-zsh"
+    - "{{ home }}/.aerospace.toml"
+  when: ansible_facts["os_family"] == "Darwin"
+- name: Setup OSX only env dotfile links
+  ansible.builtin.file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ username }}"
+    mode: "0755"
+    state: link
+  loop:
+    - { src: "{{ playbook_dir }}/env/zshrc", dest: "{{ home }}/.zshrc" }
+    - { src: "{{ playbook_dir }}/env/zshrc.pre-oh-my-zsh", dest: "{{ home }}/.zshrc.pre-oh-my-zsh" }
+    - { src: "{{ playbook_dir }}/env/aerospace.toml", dest: "{{ home }}/.aerospace.toml" }
+  when: ansible_facts["os_family"] == "Darwin"

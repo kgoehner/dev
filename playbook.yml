@@ -1,15 +1,17 @@
-# ansible-playbook -i inventory.ini playbook.yml
+# ansible-playbook -i inventory.ini playbook.yml --ask-become-pass
 ---
-- name: Homebrew Installs
+- name: Install Homebrew
   hosts: localhost
   tasks:
-  - name: Tap Repository
-    community.general.homebrew_tap:
-      name: "{{ item }}"
-      state: present
-    with_list:
-    - FelixKratz/formulae
-    when: ansible_facts["os_family"] == "Darwin"
+  - name: Install
+    ansible.builtin.shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    args:
+      creates: /opt/homebrew/bin/brew
+    become: yes
+
+- name: Homebrew Global Installs
+  hosts: localhost
+  tasks:
   - name: Brew Installs
     community.general.homebrew:
       name: "{{ item }}"
@@ -19,7 +21,6 @@
     - neovim
     - awscli
     - fzf
-    - ghostty
     - git
     - git-lfs
     - gitleaks
@@ -39,129 +40,12 @@
     - xh
     - zoxide
     - starship
-    - borders  # From FelixKratz/formulae
     - stow
     - ffmpeg
     - gifsicle
     - sqlite
     - kubectl
-    when: ansible_facts["os_family"] == "Darwin"
-  - name: Brew Cask Installs
-    community.general.homebrew_cask:
-      name: "{{ item }}"
-      state: present
-    with_list:
-    - nikitabobko/tap/aerospace
-    when: ansible_facts["os_family"] == "Darwin"
-
-
-- name: Linux Installs
-  hosts: localhost
-  tasks:
-  - name: Include main vars
-    ansible.builtin.include_vars:
-      file: vars.yml
-  - name: Yum Installs
-    ansible.builtin.yum:
-      name:
-      - awscli
-      - git
-      - git-lfs
-      - jq
-      - libevent-devel
-      - mc
-      - tmux
-      state: present
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Download fzf
-    ansible.builtin.git:
-      repo: https://github.com/junegunn/fzf.git
-      dest: build/fzf
-    environment:
-      GIT_TERMINAL_PROMPT: 0
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Install fzf
-    ansible.builtin.shell: ./install >> install.txt
-    args:
-      chdir: build/fzf
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Fetch ripgrep
-    ansible.builtin.git:
-      repo: https://github.com/BurntSushi/ripgrep
-      dest: build/ripgrep
-    environment:
-      GIT_TERMINAL_PROMPT: 0
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Install ripgrep
-    ansible.builtin.shell: cargo build --release
-    args:
-      chdir: build/ripgrep
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Copy ripgrep to bin
-    ansible.builtin.command:
-      cmd: "cp -r target/release/rg ../../env/local/bin/"
-    args:
-      chdir: build/ripgrep
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Fetch mise
-    ansible.builtin.uri:
-      url: https://mise.run
-      return_content: yes
-    register: mise_installer
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Run mise installer
-    ansible.builtin.shell:
-      cmd: sh -s -- -y
-      stdin: "{{ mise_installer.content }}"
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Download tmux
-    ansible.builtin.git:
-      repo: https://github.com/tmux/tmux.git
-      dest: build/tmux
-    environment:
-      GIT_TERMINAL_PROMPT: 0
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Install tmux
-    ansible.builtin.command:
-      cmd: "{{ item }}"
-    args:
-      chdir: build/tmux
-    with_items:
-    - sh autogen.sh
-    - ./configure --prefix {{ home }}/.local
-    - make
-    - make install
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Download bat
-    ansible.builtin.git:
-      repo: https://github.com/sharkdp/bat.git
-      dest: build/bat
-    environment:
-      GIT_TERMINAL_PROMPT: 0
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Install bat
-    ansible.builtin.command:
-      cmd: "{{ item }}"
-    args:
-      chdir: build/bat
-    with_items:
-    - cargo install --locked bat
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Download xh
-    ansible.builtin.git:
-      repo: https://github.com/ducaale/xh.git
-      dest: build/xh
-    environment:
-      GIT_TERMINAL_PROMPT: 0
-    when: ansible_facts["os_family"] == "RedHat"
-  - name: Install xh
-    ansible.builtin.command:
-      cmd: "{{ item }}"
-    args:
-      chdir: build/xh
-    with_items:
-    - cargo install --locked xh
-    when: ansible_facts["os_family"] == "RedHat"
+    - zk
 
 
 - name: TPM (tmux plugin manager)
@@ -181,7 +65,6 @@
   - name: Install NPM
     ansible.builtin.command:
       cmd: "mise use -g node"
-    when: ansible_facts["os_family"] == "Darwin"
   - name: Install Python
     ansible.builtin.command:
       cmd: "mise use -g python"
@@ -202,38 +85,12 @@
       - isort
 
 
-- name: Setup Home Environment
+- name: Setup Config
   hosts: localhost
   tasks:
   - name: Include main vars
     ansible.builtin.include_vars:
       file: vars.yml
-  - name: Remove OSX only dotfiles
-    ansible.builtin.file:
-      path: "{{ item }}"
-      state: absent
-    loop:
-      - "{{ home }}/.zshrc"
-      - "{{ home }}/.zshrc.pre-oh-my-zsh"
-      - "{{ home }}/.aerospace.toml"
-    when: ansible_facts["os_family"] == "Darwin"
-  - name: Setup OSX only env dotfile links
-    ansible.builtin.file:
-      src: "{{ item.src }}"
-      dest: "{{ item.dest }}"
-      owner: "{{ username }}"
-      mode: "0755"
-      state: link
-    loop:
-      - { src: "{{ playbook_dir }}/env/zshrc", dest: "{{ home }}/.zshrc" }
-      - { src: "{{ playbook_dir }}/env/zshrc.pre-oh-my-zsh", dest: "{{ home }}/.zshrc.pre-oh-my-zsh" }
-      - { src: "{{ playbook_dir }}/env/aerospace.toml", dest: "{{ home }}/.aerospace.toml" }
-    when: ansible_facts["os_family"] == "Darwin"
-
-
-- name: Setup Config
-  hosts: localhost
-  tasks:
   - name: Find all files in env/config
     ansible.builtin.find:
       paths: "{{ playbook_dir }}/env/config"
@@ -252,23 +109,29 @@
 - name: Setup Share
   hosts: localhost
   tasks:
+  - name: Include main vars
+    ansible.builtin.include_vars:
+      file: vars.yml
   - name: Find all files in env/local/share
     ansible.builtin.find:
       paths: "{{ playbook_dir }}/env/local/share"
       file_type: file
-    register: bin
+    register: share
   - name: Create symlinks to ~/.local/share
     ansible.builtin.file:
       src: "{{ item.path }}"
       path: "{{ home }}/.local/share/{{ item.path | basename }}"
       owner: "{{ username }}"
       state: link
-    with_items: "{{ bin.files }}"
+    with_items: "{{ share.files }}"
 
 
 - name: Setup Bin
   hosts: localhost
   tasks:
+  - name: Include main vars
+    ansible.builtin.include_vars:
+      file: vars.yml
   - name: Find all files in env/local/bin
     ansible.builtin.find:
       paths: "{{ playbook_dir }}/env/local/bin"
@@ -283,6 +146,17 @@
     with_items: "{{ bin.files }}"
 
 
+- name: Platform Installs
+  hosts: all
+  tasks:
+    - name: OSX Installs
+      ansible.builtin.import_tasks: "osx_tasks.yml"
+      when: ansible_facts["os_family"] == "Darwin"
+    - name: Linux Installs
+      ansible.builtin.import_tasks: "linux_tasks.yml"
+      when: ansible_facts["os_family"] == "RedHat"
+
+
 - name: Update Homebrew
   hosts: localhost
   tasks:
@@ -290,7 +164,6 @@
     community.general.homebrew:
       update_homebrew: true
       upgrade_all: true
-    when: ansible_facts["os_family"] == "Darwin"
 
 
 - name: Rust
