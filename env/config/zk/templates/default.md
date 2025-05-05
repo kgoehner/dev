@@ -2,13 +2,8 @@
 title: {{title}}
 date: {{format-date now "%Y-%m-%dT%H:%M:%S%z"}}
 author: {{extra.author}}
-tags: [todo, daily]
+tags: []
 ---
-# {{format-date now "long"}}
+# {{title}}
 
----
-## TODO
 {{content}}
-
----
-## Accomplished

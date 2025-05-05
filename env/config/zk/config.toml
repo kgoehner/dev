@@ -55,6 +55,18 @@ filename = "{{format-date now '%Y-%m-%d'}}"
 extension = "md"
 template = "daily.md"
 
+[group.inbox]
+paths = ["inbox"]
+
+[group.knowledge]
+paths = ["knowledge"]
+
+[group.knowledge.note]
+extension = "md"
+template = "knowledge.md"
+
+[group.projects]
+paths = ["projects"]
 
 # MARKDOWN SETTINGS
 [format.markdown]
@@ -82,12 +94,13 @@ fzf-preview = "bat -p --color always {-1}"
 # NAMED FILTERS
 [filter]
 recents = "--sort created- --created-after 'last two weeks'"
+todo = "todo/daily --sort created-"
 
 # COMMAND ALIASES
 [alias]
 
 # Edit the last modified note.
-edlast = "zk edit --limit 1 --sort modified- $@"
+edlast = 'zk edit --limit 1 --sort modified- "$@"'
 
 # Edit the notes selected interactively among the notes created the last two weeks.
 recent = "zk edit --sort created- --created-after 'last two weeks' --interactive"
@@ -95,13 +108,22 @@ recent = "zk edit --sort created- --created-after 'last two weeks' --interactive
 # Show a random note.
 lucky = "zk list --quiet --format full --sort random --limit 1"
 
+in = 'zk new "$ZK_NOTEBOOK_DIR/inbox" "$@"'
+
 ls = "zk edit --interactive"
 
-t = "zk edit --interactive --tag $argv"
+t = 'zk edit --interactive --tag "$argv"'
 
 config = "nvim $HOME/.config/zk/config.toml"
 
+# Edit the current todo daily
 daily = "zk new --no-input $ZK_NOTEBOOK_DIR/todo/daily"
+
+# Edit my most recent todo daily
+last_daily = 'zk list "$ZK_NOTEBOOK_DIR/todo/daily" --format {{abs-path}} --quiet | xargs zk edit'
+
+# Delete Notes
+rm = 'zk list --interactive --quiet --format "{{abs-path}}" --delimiter0 $@ | xargs -0 rm -vf --'
 
 
 # LSP (EDITOR INTEGRATION)
