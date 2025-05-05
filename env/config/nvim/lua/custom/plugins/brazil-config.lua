@@ -1,3 +1,7 @@
+local work = require("utils.work")
+
+if not work.is_work_machine() then return {} end
+
 return {
   url = "ssh://git.amazon.com/pkg/NinjaHooks",
   branch = "mainline",
