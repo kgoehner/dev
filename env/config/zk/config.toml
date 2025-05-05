@@ -1,6 +1,6 @@
-# NOTEBOOK SETTINGS
-[notebook]
-dir = "$HOME/Documents/notes/personal"
+# NOTEBOOK SETTINGS - use ZK_NOTEBOOK_DIR instead
+#[notebook]
+#dir = "$HOME/Documents/notes/personal"
 
 # NOTE SETTINGS
 [note]

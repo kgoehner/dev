@@ -11,6 +11,9 @@ alias ll="ls -la"
 # Todo
 alias todo=todo.sh
 
+# Notebook
+export ZK_NOTEBOOK_DIR=$HOME/Documents/notes/personal/
+
 # Set up rtx for runtime management
 eval "$(mise activate zsh)"
 
