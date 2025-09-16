@@ -1,0 +1,239 @@
+#!/bin/bash
+set -e
+
+# A simple forwarder script that appends the necessary arguments for curl to:
+# 1. use certification authority certs from AmazonCACerts package
+# 2. use kerberos
+# 3. use cookies to go through sentry.amazon.com
+#
+# Authors:
+#  Ted Romer
+#  Ben Bernard
+#  Steven Morrison
+#  Marco Bonetti
+
+ENVROOT="$(cd $(PATH=/usr/bin:/bin dirname $0)/.. 2>/dev/null && pwd)"
+JARHOME=""
+CLEANUP=false
+COOKIEJAR=""
+CURLPARAMS=()
+PRIMINGPARAMS=()
+URL=${@: -1}
+
+# Support using environment for Midway cookie location
+if [ -z ${MIDWAY_COOKIE_JAR+x} ]; then
+  # Cannonical location, if not in environment
+  MIDWAY_COOKIE_JAR=${HOME}/.midway/cookie
+fi
+
+# Show help
+usage() {
+  cat << EOF
+Usage:
+  $0 [--sentry-path path] [curl options] URL
+
+Options:
+  --help|-h           This help
+
+  --enable-kerberos   Force enable or disable Kerberos support
+  --disable-kerberos
+
+  --sentry-path path  Specifies a path to trigger a sentry redirect, useful
+                      when you need to trigger a sentry cookie refresh at a
+                      path different than /
+
+EOF
+}
+
+# Support for Apollo and non-Apollo hosts
+CERTPATH=${ENVROOT}/etc/internal_and_external_cacerts
+if [[ ! -e ${CERTPATH} ]]; then
+    if [[ -e /etc/ssl/certs ]]; then
+        CERTPATH=/etc/ssl/certs # Ubuntu
+    else
+        CERTPATH=               # macOS
+    fi
+fi
+
+TOOL_CURL=${ENVROOT}/bin/curl
+if [[ ! -x ${TOOL_CURL} ]]; then
+    TOOL_CURL=/usr/bin/curl
+fi
+
+ENABLE_KERBEROS=true
+
+# Extract protocol, domain and port for sentry
+# I'm currently ignoring the proto://user:password@domain/ format
+PROTO="${URL%%:*}"
+DOMAIN="${URL#*//}"
+DOMAIN="${DOMAIN%%/*}"
+PORT="${DOMAIN#*:}"
+DOMAIN="${DOMAIN%%:*}"
+SENTRYPATH=""
+# Protocol not specified
+if [[ ${PROTO} = ${URL} || ${PROTO} = ${DOMAIN} ]]; then
+  PROTO="https" # HTTPS ALL THE THING!
+fi
+# Port not specified
+if [[ ${DOMAIN} = ${PORT} ]]; then
+  case "${PROTO}" in
+    "http")
+      PORT="80"
+      ;;
+    "https")
+      PORT="443"
+      ;;
+    *)
+      echo "Unknown port, please specify it"
+      exit 1
+      ;;
+  esac
+fi
+
+# Consume params, extract custom options if needed
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    "--help"|"-h")
+      # HELP!
+      usage
+      exit 0
+      ;;
+    "--disable-kerberos")
+      ENABLE_KERBEROS=false
+      shift 1
+      ;;
+    "--enable-kerberos")
+      ENABLE_KERBEROS=true
+      shift 1
+      ;;
+    "--sentry-path")
+      # Get path from $2, strip leading /
+      SENTRYPATH="$(echo ${2#/})"
+      shift 2
+      ;;
+    -v | -vv | -vvv | -vvvv | \
+    -p | --proxy-anyauth | --proxy-basic | --proxy-digest | \
+    --proxy-negotiate | --proxy-ntlm | --proxy-insecure | \
+    --proxy-ssl-allow-beast | --proxy-ssl-auto-client-cert | \
+    --proxy-tlsv1 | --proxy-http2 | --proxy-ca-native | \
+    --proxytunnel | --socks5-basic | --socks5-gssapi | \
+    --socks5-gssapi-nec )
+      # Single parameters needed (or useful) for the priming request
+      PRIMINGPARAMS+=("$1")
+      shift 1
+      ;;
+    -x | --proxy | --proxy-user | --proxy1.0 | --proxy-header | \
+    --proxy-cacert | --proxy-capath | --proxy-cert | --proxy-cert-type | \
+    --proxy-ciphers | --proxy-crlfile | --proxy-key | --proxy-key-type | \
+    --proxy-pass | --proxy-pinnedpubkey | --proxy-service-name | \
+    --proxy-tls13-ciphers | --proxy-tlsauthtype | --proxy-tlspassword | \
+    --proxy-tlsuser | --preproxy | --noproxy | --socks4 | --socks4a | \
+    --socks5 | --socks5-hostname | --socks5-gssapi-service )
+      # Proxy parameters are needed for the priming request
+      PRIMINGPARAMS+=("$1" "$2")
+      CURLPARAMS+=("$1" "$2")
+      shift 2
+      ;;
+    *)
+      # Not interesting
+      CURLPARAMS+=("$1")
+      shift 1
+      ;;
+  esac
+done
+
+# Check if correctly invoked
+if [[ ${#CURLPARAMS[@]} -le 0 ]]; then
+  usage
+  exit 1
+fi
+
+# Check if we are $HOME-less or not, then create our cookie jar
+if [[ -d ${HOME} ]]; then
+  JARHOME="${HOME}"
+else
+  JARHOME="$(mktemp -d)"
+  CLEANUP=true
+fi
+JARDIR="${JARHOME}/.envimprovement"
+COOKIEJAR="${JARDIR}/kcurl.cookies"
+mkdir -p "${JARDIR}"
+
+# If we have a home, and a midway cookie, add that to our cookie jar so sites moving from
+# sentry to midway continue to work transparently
+if [[ -f ${MIDWAY_COOKIE_JAR} ]]; then
+  # Delete the old midway cookies from the jar - they might be stale
+  # Before you complain about this being perl and not sed, study the difference
+  # in behavior between the -i flag in BSD vs GNU seds
+  # Use the system perl because the wrapper from MakePerl58Default only works in apollo
+  test -f ${COOKIEJAR} && /usr/bin/perl -i -ne '/^(#HttpOnly_)?\.?midway-auth\./ || print' ${COOKIEJAR}
+  # Also delete any cookies from sentry - the interplay from the two systems means we need them 
+  test -f ${COOKIEJAR} && /usr/bin/perl -i -ne '/^(#HttpOnly_)?\.?sentry\./ || print' ${COOKIEJAR}
+  # Copy in the new midway cookies and sentry cookies
+  grep -e '^\(#HttpOnly_\)\?\.\?midway-auth\.' ${MIDWAY_COOKIE_JAR} >> ${COOKIEJAR}
+  # Note: Some people don't have sentry cookies - for them, this is a noop (so make sure we don't fail)
+  grep -e '^\(#HttpOnly_\)\?\.\?sentry\.' ${MIDWAY_COOKIE_JAR} >> ${COOKIEJAR} || true 
+fi
+
+HASDATA=false
+INSECURE_SSL_OPTION=''
+for ((i = 0; i <= ${#CURLPARAMS[@]}; i++)); do
+    # Here we are attempting to determine if we are doing an HTTP POST.
+    # If this is a POST, we need to prefetch the Sentry cookies, otherwise the POST
+    # to the end server will redirect to Sentry which in turn does a redirect back to the end server,
+    # changing the POST to a GET in the process.  If we fetch the Sentry cookie ahead of time we avoid
+    # the redirection.
+    #
+    # These are the options we are triggering on:
+    #   -d, --data: Sends the specified data in a POST request to the HTTP server
+    #   --data-binary: Same as above, but posts data exactly as specified with no extra processing whatsoever
+    #   --data-urlencode: Same as above, with the exception that this performs URL-encoding
+    #   -F, --form: This lets curl emulate a filled-in form. This causes curl to POST data
+    #   --form-string: Similar to --form except that the value string for the named parameter is used literally
+    #   POST: An explicit post was requested, e.g. -X POST
+
+    if echo ${CURLPARAMS[$i]} | grep -q -e '^-d\|^--data\|^-F\|^--form\|^POST$'; then
+        HASDATA=true
+    fi
+
+    # If user specified -k, we will need to pass -k when refreshing the sentry cookie
+    # Caveat: This doesn't work when -k is bundled with other options, e.g. -vk
+    if [[ "${CURLPARAMS[$i]}" == '-k' || "${CURLPARAMS[$i]}" == '--insecure' ]]; then
+        INSECURE_SSL_OPTION='-k'
+    fi
+done
+
+KERB_OPTIONS=""
+if ${ENABLE_KERBEROS}; then
+    KERB_OPTIONS="--negotiate -u :"
+else
+    KERB_OPTIONS="-b sentry_braveheart=1" #Tells Sentry to skip kerberos and just send us to midway
+fi
+
+# Refresh sentry cookie if needed
+if ${HASDATA}; then
+  ${TOOL_CURL} ${KERB_OPTIONS} \
+      --anyauth --location-trusted \
+      --max-redirs 10 \
+      -b ${COOKIEJAR} -c ${COOKIEJAR} \
+      ${CERTPATH:+--capath $CERTPATH} \
+      $INSECURE_SSL_OPTION \
+      ${PRIMINGPARAMS[@]} \
+      -sS "${PROTO}://${DOMAIN}:${PORT}/${SENTRYPATH}" >/dev/null
+# This is not cleanly working yet, for now we rely on
+# "${PROTO}://${DOMAIN}:${PORT}/" properly redirecting us.
+# Anyway, left here for future updates
+#"https://sentry.amazon.com/SSO/redirect?redirect_uri=${PROTO}%3A%2F%2F${DOMAIN}&client_id=${DOMAIN}:${PORT}&scope=openid&response_type=id_token&nonce=1"
+fi
+
+# Run curl
+${TOOL_CURL} ${KERB_OPTIONS} \
+    --anyauth --location-trusted \
+    -b ${COOKIEJAR} -c ${COOKIEJAR} \
+    --max-redirs 10 \
+    ${CERTPATH:+--capath $CERTPATH} \
+    "${CURLPARAMS[@]}"
+# Cleanup
+if ${CLEANUP}; then
+  rm -rf "${JARHOME}"
+fi

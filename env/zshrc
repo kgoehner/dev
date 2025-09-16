@@ -113,6 +113,7 @@ source $HOME/.zshrc.amzn
 export AWS_EC2_METADATA_DISABLED=true
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+eval "$(mise activate zsh)"
+
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-eval "$(mise activate zsh)"

@@ -14,5 +14,5 @@ customCommands:
           preset: branches
     command: "cr {{if .Form.ExistingRevision}} --update-review {{.Form.ExistingRevision}} {{else}} --new-review {{end}} --parent $(git parent) --destination-branch {{.Form.DestinationBranch}}"
     loadingText: "Creating CR revision"
-    showOutput: true
     outputTitle: CR
+    output: popup
