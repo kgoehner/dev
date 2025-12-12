@@ -18,6 +18,7 @@ services:
     depends_on:
       - redis
       - database
+    command: ['start.sh', 'immich']
 
   immich-machine-learning:
     container_name: immich_machine_learning

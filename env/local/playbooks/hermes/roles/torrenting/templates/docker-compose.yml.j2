@@ -8,10 +8,11 @@ services:
       - NET_ADMIN
     environment:
       - VPN_SERVICE_PROVIDER={{ vault_vpn_provider }}
-      - VPN_TYPE=openvpn
-      - OPENVPN_USER={{ vault_vpn_username }}
-      - OPENVPN_PASSWORD={{ vault_vpn_password }}
-      - SERVER_COUNTRIES={{ vault_vpn_countries | default('Netherlands') }}
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY={{ vault_vpn_private_key }}
+      - WIREGUARD_PRESHARED_KEY={{ vault_vpn_preshared_key }}
+      - WIREGUARD_ADDRESSES={{ vault_vpn_addresses }}
+      - SERVER_COUNTRIES={{ vault_vpn_countries }}
     ports:
       - "8086:8080"  # qBittorrent web UI
     volumes:

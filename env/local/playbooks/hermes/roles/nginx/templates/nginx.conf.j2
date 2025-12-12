@@ -5,9 +5,34 @@ events {
 http {
     client_max_body_size 100M;
 
+    # Redirect HTTP to HTTPS (except paperless)
     server {
         listen 80;
+        server_name ~^(?!paperless\.).*\.hermes\.local$;
+        return 301 https://$host$request_uri;
+    }
+
+    # HTTP-only for Paperless (mobile app compatibility)
+    server {
+        listen 80;
+        server_name paperless.hermes.local;
+        location / {
+            proxy_pass http://localhost:8000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-Server $host;
+        }
+    }
+
+    # HTTPS servers
+    server {
+        listen 443 ssl;
         server_name hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         location / {
             proxy_pass http://localhost:8084;
             proxy_set_header Host $host;
@@ -18,8 +43,10 @@ http {
     }
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name portainer.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         location / {
             proxy_pass http://localhost:9000;
             proxy_set_header Host $host;
@@ -30,26 +57,34 @@ http {
     }
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name pihole.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         return 301 http://pihole.hermes.local:8080/admin$request_uri;
     }
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name paperless.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         location / {
             proxy_pass http://localhost:8000;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-Server $host;
         }
     }
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name kuma.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         location / {
             proxy_pass http://localhost:3001;
             proxy_set_header Host $host;
@@ -60,8 +95,10 @@ http {
     }
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name jellyfin.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         location / {
             proxy_pass http://localhost:8096;
             proxy_set_header Host $host;
@@ -72,8 +109,10 @@ http {
     }
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name nextcloud.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         client_max_body_size 512M;
         location / {
             proxy_pass http://localhost:8081;
@@ -85,44 +124,10 @@ http {
     }
 
     server {
-        listen 80;
-        server_name grafana.hermes.local;
-        location / {
-            proxy_pass http://localhost:3000;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-    }
-
-    server {
-        listen 80;
-        server_name prometheus.hermes.local;
-        location / {
-            proxy_pass http://localhost:9090;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-    }
-
-    server {
-        listen 80;
-        server_name qbittorrent.hermes.local;
-        location / {
-            proxy_pass http://localhost:8086;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-    }
-
-    server {
-        listen 80;
+        listen 443 ssl;
         server_name files.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         client_max_body_size 1G;
         location / {
             proxy_pass http://localhost:8087;
@@ -134,11 +139,70 @@ http {
     }
 
     server {
-        listen 80;
+        listen 443 ssl;
         server_name photos.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
         client_max_body_size 2G;
         location / {
             proxy_pass http://localhost:2283;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name qbittorrent.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:8086;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name bitwarden.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        client_max_body_size 128M;
+        location / {
+            proxy_pass http://localhost:8083;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name grafana.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:3000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name prometheus.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:9090;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

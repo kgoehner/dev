@@ -1,0 +1,7 @@
+---
+- name: restart homer
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/homer"
+    recreate: always
+    state: present
+  when: not ansible_check_mode
