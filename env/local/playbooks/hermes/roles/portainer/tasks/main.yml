@@ -17,6 +17,13 @@
     dest: "{{ docker_compose_dir }}/portainer/docker-compose.yml"
     mode: '0644'
 
+- name: Pull latest Portainer image
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/portainer"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
 - name: Start Portainer stack
   community.docker.docker_compose_v2:
     project_src: "{{ docker_compose_dir }}/portainer"

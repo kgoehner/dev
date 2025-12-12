@@ -1,0 +1,25 @@
+---
+- name: Create Bitwarden directory
+  file:
+    path: "{{ docker_compose_dir }}/bitwarden"
+    state: directory
+    mode: '0755'
+
+- name: Deploy Bitwarden docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/bitwarden/docker-compose.yml"
+    mode: '0644'
+
+- name: Pull latest Bitwarden image
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/bitwarden"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
+- name: Start Bitwarden stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/bitwarden"
+    state: present
+  when: not ansible_check_mode

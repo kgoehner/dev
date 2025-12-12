@@ -1,0 +1,25 @@
+---
+- name: Create torrenting directory
+  file:
+    path: "{{ docker_compose_dir }}/torrenting"
+    state: directory
+    mode: '0755'
+
+- name: Deploy torrenting docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/torrenting/docker-compose.yml"
+    mode: '0644'
+
+- name: Pull latest torrenting images
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/torrenting"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
+- name: Start torrenting stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/torrenting"
+    state: present
+  when: not ansible_check_mode

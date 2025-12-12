@@ -1,0 +1,45 @@
+---
+services:
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:release
+    restart: unless-stopped
+    ports:
+      - "2283:3001"
+    environment:
+      DB_HOSTNAME: immich_postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: "{{ vault_immich_db_password }}"
+      DB_DATABASE_NAME: immich
+      REDIS_HOSTNAME: immich_redis
+    volumes:
+      - /media/photos:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - redis
+      - database
+
+  immich-machine-learning:
+    container_name: immich_machine_learning
+    image: ghcr.io/immich-app/immich-machine-learning:release
+    restart: unless-stopped
+    volumes:
+      - ./model-cache:/cache
+    environment:
+      TRANSFORMERS_CACHE: /cache
+
+  redis:
+    container_name: immich_redis
+    image: redis:6.2-alpine
+    restart: unless-stopped
+
+  database:
+    container_name: immich_postgres
+    image: tensorchord/pgvecto-rs:pg14-v0.2.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "{{ vault_immich_db_password }}"
+      POSTGRES_USER: postgres
+      POSTGRES_DB: immich
+    volumes:
+      - ./postgres:/var/lib/postgresql/data

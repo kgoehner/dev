@@ -17,6 +17,13 @@
     dest: "{{ docker_compose_dir }}/jellyfin/docker-compose.yml"
     mode: '0644'
 
+- name: Pull latest Jellyfin image
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/jellyfin"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
 - name: Start Jellyfin stack
   community.docker.docker_compose_v2:
     project_src: "{{ docker_compose_dir }}/jellyfin"

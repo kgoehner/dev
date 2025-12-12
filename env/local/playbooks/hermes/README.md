@@ -8,7 +8,10 @@ Ansible playbook for deploying a home media and services stack on a Raspberry Pi
 - **Pi-hole** - Network-wide ad blocking and DNS
 - **Paperless-ngx** - Document management system
 - **Jellyfin** - Media server
+- **Nextcloud** - File sync and collaboration platform
+- **Bitwarden** - Self-hosted password manager
 - **Uptime Kuma** - Service monitoring and uptime tracking
+- **Homer** - Homepage dashboard for all services
 - **Nginx** - Reverse proxy for local domain routing
 
 ## Prerequisites
@@ -64,6 +67,33 @@ ansible-playbook -i inventory.ini playbook.yml --ask-vault-pass
 ansible-playbook -i inventory.ini playbook.yml --tags nginx --ask-vault-pass
 ```
 
+### Deploy by Service Group
+
+```bash
+# Deploy media services
+ansible-playbook -i inventory.ini playbook.yml --tags media
+
+# Deploy security services  
+ansible-playbook -i inventory.ini playbook.yml --tags security
+
+# Deploy productivity apps
+ansible-playbook -i inventory.ini playbook.yml --tags productivity
+
+# Deploy core infrastructure
+ansible-playbook -i inventory.ini playbook.yml --tags core
+```
+
+### Update Docker Images
+
+```bash
+# Update all service images
+ansible-playbook -i inventory.ini playbook.yml --tags update
+
+# Update specific service groups
+ansible-playbook -i inventory.ini playbook.yml --tags media,update
+ansible-playbook -i inventory.ini playbook.yml --tags security,update
+```
+
 ## SSH Access
 
 ```bash
@@ -108,10 +138,13 @@ docker compose restart
 
 Access these URLs from your local network (requires Pi-hole as DNS):
 
+- **Homepage**: http://hermes.local
 - **Portainer**: http://portainer.hermes.local
 - **Pi-hole**: http://pihole.hermes.local:8080/admin
 - **Paperless**: http://paperless.hermes.local
 - **Jellyfin**: http://jellyfin.hermes.local
+- **Nextcloud**: http://nextcloud.hermes.local
+- **Bitwarden**: http://bitwarden.hermes.local
 - **Uptime Kuma**: http://kuma.hermes.local
 
 ## DNS Configuration

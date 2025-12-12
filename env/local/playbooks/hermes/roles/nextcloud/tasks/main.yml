@@ -11,6 +11,13 @@
     dest: "{{ docker_compose_dir }}/nextcloud/docker-compose.yml"
     mode: '0644'
 
+- name: Pull latest Nextcloud image
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/nextcloud"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
 - name: Start Nextcloud stack
   community.docker.docker_compose_v2:
     project_src: "{{ docker_compose_dir }}/nextcloud"

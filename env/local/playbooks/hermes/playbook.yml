@@ -8,14 +8,20 @@
     timezone: America/New_York
     pihole_webpassword: "{{ vault_pihole_password }}"
   roles:
-    - preflight
-    - docker
-    - portainer
-    - pihole
-    - paperless
-    - jellyfin
-    - nextcloud
-    - uptime-kuma
-    - wireguard
-    - nginx
-    - restic
+    - { role: preflight, tags: ['core', 'infrastructure'] }
+    - { role: docker, tags: ['core', 'infrastructure'] }
+    - { role: portainer, tags: ['core', 'infrastructure'] }
+    - { role: pihole, tags: ['core', 'infrastructure', 'dns'] }
+    - { role: paperless, tags: ['productivity'] }
+    - { role: jellyfin, tags: ['media'] }
+    - { role: nextcloud, tags: ['productivity'] }
+    - { role: torrenting, tags: ['media', 'torrenting'] }
+    - { role: filebrowser, tags: ['media', 'files'] }
+    - { role: immich, tags: ['media', 'photos'] }
+    - { role: bitwarden, tags: ['security'] }
+    - { role: uptime-kuma, tags: ['core', 'monitoring'] }
+    - { role: monitoring, tags: ['monitoring', 'metrics'] }
+    - { role: homer, tags: ['core', 'dashboard'] }
+    - { role: wireguard, tags: ['security', 'vpn'] }
+    - { role: nginx, tags: ['core', 'infrastructure', 'proxy'] }
+    # - restic

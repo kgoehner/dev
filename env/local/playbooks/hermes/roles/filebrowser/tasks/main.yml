@@ -1,0 +1,25 @@
+---
+- name: Create filebrowser directory
+  file:
+    path: "{{ docker_compose_dir }}/filebrowser"
+    state: directory
+    mode: '0755'
+
+- name: Deploy filebrowser docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/filebrowser/docker-compose.yml"
+    mode: '0644'
+
+- name: Pull latest filebrowser image
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/filebrowser"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
+- name: Start filebrowser stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/filebrowser"
+    state: present
+  when: not ansible_check_mode

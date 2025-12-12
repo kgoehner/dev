@@ -1,0 +1,31 @@
+---
+- name: Create Immich directory
+  file:
+    path: "{{ docker_compose_dir }}/immich"
+    state: directory
+    mode: '0755'
+
+- name: Create Immich upload directory
+  file:
+    path: /media/photos
+    state: directory
+    mode: '0755'
+
+- name: Deploy Immich docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/immich/docker-compose.yml"
+    mode: '0644'
+
+- name: Pull latest Immich images
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/immich"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
+- name: Start Immich stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/immich"
+    state: present
+  when: not ansible_check_mode

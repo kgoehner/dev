@@ -1,0 +1,31 @@
+---
+- name: Create Homer directory
+  file:
+    path: "{{ docker_compose_dir }}/homer"
+    state: directory
+    mode: '0755'
+
+- name: Deploy Homer docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/homer/docker-compose.yml"
+    mode: '0644'
+
+- name: Deploy Homer config
+  template:
+    src: config.yml.j2
+    dest: "{{ docker_compose_dir }}/homer/config.yml"
+    mode: '0644'
+
+- name: Pull latest Homer image
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/homer"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
+- name: Start Homer stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/homer"
+    state: present
+  when: not ansible_check_mode

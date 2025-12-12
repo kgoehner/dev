@@ -1,0 +1,13 @@
+---
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - "8087:80"
+    volumes:
+      - /media:/srv/media
+      - ./database.db:/database.db
+    environment:
+      - FB_DATABASE=/database.db

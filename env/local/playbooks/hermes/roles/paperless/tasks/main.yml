@@ -11,6 +11,13 @@
     dest: "{{ docker_compose_dir }}/paperless/docker-compose.yml"
     mode: '0644'
 
+- name: Pull latest Paperless image
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/paperless"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
 - name: Start Paperless stack
   community.docker.docker_compose_v2:
     project_src: "{{ docker_compose_dir }}/paperless"

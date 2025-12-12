@@ -1,0 +1,12 @@
+---
+services:
+  homer:
+    image: b4bz/homer:latest
+    container_name: homer
+    restart: unless-stopped
+    ports:
+      - "8084:8080"
+    volumes:
+      - ./config.yml:/www/assets/config.yml
+    environment:
+      - INIT_ASSETS=0

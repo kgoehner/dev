@@ -1,0 +1,31 @@
+---
+- name: Create monitoring directory
+  file:
+    path: "{{ docker_compose_dir }}/monitoring"
+    state: directory
+    mode: '0755'
+
+- name: Deploy monitoring docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/monitoring/docker-compose.yml"
+    mode: '0644'
+
+- name: Deploy Prometheus config
+  template:
+    src: prometheus.yml.j2
+    dest: "{{ docker_compose_dir }}/monitoring/prometheus.yml"
+    mode: '0644'
+
+- name: Pull latest monitoring images
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/monitoring"
+    pull: always
+  when: not ansible_check_mode
+  tags: ['update']
+
+- name: Start monitoring stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/monitoring"
+    state: present
+  when: not ansible_check_mode
