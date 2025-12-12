@@ -1,0 +1,40 @@
+---
+- hosts: hermes_servers
+  become: yes
+  vars_files:
+    - vault.yml
+  vars:
+    docker_compose_dir: /srv/docker
+    timezone: America/New_York
+    pihole_webpassword: "{{ vault_pihole_password }}"
+  tasks:
+    - name: Test connection
+      ping:
+
+    - name: Check Python version
+      command: python3 --version
+      register: python_version
+      changed_when: false
+
+    - name: Display Python version
+      debug:
+        msg: "{{ python_version.stdout }}"
+
+    - name: Check if Docker is installed
+      shell: which docker && docker --version || echo "Not installed"
+      register: docker_version
+      changed_when: false
+
+    - name: Display Docker status
+      debug:
+        msg: "{{ docker_version.stdout }}"
+
+    - name: Check disk space
+      shell: df -h /srv
+      register: disk_space
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Display disk space
+      debug:
+        var: disk_space.stdout_lines

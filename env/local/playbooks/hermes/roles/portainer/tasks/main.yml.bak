@@ -1,0 +1,19 @@
+---
+- name: Create Portainer directory
+  file:
+    path: "{{ docker_compose_dir }}/portainer"
+    state: directory
+    mode: '0755'
+
+- name: Deploy Portainer docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/portainer/docker-compose.yml"
+    mode: '0644'
+
+- name: Start Portainer stack
+  docker_compose:
+    project_src: "{{ docker_compose_dir }}/portainer"
+    state: present
+    recreate: always
+

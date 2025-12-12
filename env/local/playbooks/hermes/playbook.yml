@@ -1,0 +1,21 @@
+---
+- hosts: hermes_servers
+  become: yes
+  vars_files:
+    - vault.yml
+  vars:
+    docker_compose_dir: /srv/docker
+    timezone: America/New_York
+    pihole_webpassword: "{{ vault_pihole_password }}"
+  roles:
+    - preflight
+    - docker
+    - portainer
+    - pihole
+    - paperless
+    - jellyfin
+    - nextcloud
+    - uptime-kuma
+    - wireguard
+    - nginx
+    - restic

@@ -1,0 +1,25 @@
+---
+- name: Create Portainer directory
+  file:
+    path: "{{ docker_compose_dir }}/portainer"
+    state: directory
+    mode: '0755'
+
+- name: Create Portainer password file
+  copy:
+    content: "{{ vault_portainer_password }}"
+    dest: "{{ docker_compose_dir }}/portainer/password"
+    mode: '0600'
+
+- name: Deploy Portainer docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/portainer/docker-compose.yml"
+    mode: '0644'
+
+- name: Start Portainer stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/portainer"
+    state: present
+  when: not ansible_check_mode
+

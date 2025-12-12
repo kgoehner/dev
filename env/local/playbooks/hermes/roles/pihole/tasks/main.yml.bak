@@ -1,0 +1,19 @@
+---
+- name: Create Pi-hole directory
+  file:
+    path: "{{ docker_compose_dir }}/pihole"
+    state: directory
+    mode: '0755'
+
+- name: Deploy Pi-hole docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/pihole/docker-compose.yml"
+    mode: '0644'
+
+- name: Start Pi-hole stack
+  docker_compose:
+    project_src: "{{ docker_compose_dir }}/pihole"
+    state: present
+    recreate: always
+

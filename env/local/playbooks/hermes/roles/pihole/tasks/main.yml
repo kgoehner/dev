@@ -1,0 +1,54 @@
+---
+- name: Create Pi-hole directory
+  file:
+    path: "{{ docker_compose_dir }}/pihole"
+    state: directory
+    mode: '0755'
+
+- name: Create Pi-hole etc-pihole directory
+  file:
+    path: "{{ docker_compose_dir }}/pihole/etc-pihole"
+    state: directory
+    mode: '0755'
+
+- name: Create Pi-hole etc-dnsmasq.d directory
+  file:
+    path: "{{ docker_compose_dir }}/pihole/etc-dnsmasq.d"
+    state: directory
+    mode: '0755'
+
+- name: Deploy Pi-hole docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/pihole/docker-compose.yml"
+    mode: '0644'
+
+- name: Start Pi-hole stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/pihole"
+    state: present
+  when: not ansible_check_mode
+
+- name: Wait for Pi-hole to be ready
+  wait_for:
+    port: 8080
+    delay: 5
+  when: not ansible_check_mode
+
+- name: Set Pi-hole password
+  command: docker exec pihole pihole setpassword {{ pihole_webpassword }}
+  when: not ansible_check_mode
+  changed_when: false
+
+- name: Add local DNS records to pihole.toml
+  lineinfile:
+    path: "{{ docker_compose_dir }}/pihole/etc-pihole/pihole.toml"
+    regexp: '^  hosts = \[\]'
+    line: '  hosts = ["{{ ansible_host }} hermes.local", "{{ ansible_host }} portainer.hermes.local", "{{ ansible_host }} pihole.hermes.local", "{{ ansible_host }} paperless.hermes.local", "{{ ansible_host }} jellyfin.hermes.local", "{{ ansible_host }} kuma.hermes.local"]'
+    backrefs: yes
+
+- name: Restart Pi-hole to apply DNS changes
+  command: docker restart pihole
+  when: not ansible_check_mode
+  changed_when: false
+

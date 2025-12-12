@@ -1,0 +1,24 @@
+---
+- name: Create Jellyfin directory
+  file:
+    path: "{{ docker_compose_dir }}/jellyfin"
+    state: directory
+    mode: '0755'
+
+- name: Create media directory
+  file:
+    path: /media
+    state: directory
+    mode: '0755'
+
+- name: Deploy Jellyfin docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_dir }}/jellyfin/docker-compose.yml"
+    mode: '0644'
+
+- name: Start Jellyfin stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_dir }}/jellyfin"
+    state: present
+  when: not ansible_check_mode

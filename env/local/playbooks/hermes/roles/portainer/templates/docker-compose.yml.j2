@@ -1,0 +1,16 @@
+---
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    command: --admin-password-file=/tmp/portainer_password
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+      - {{ docker_compose_dir }}/portainer/password:/tmp/portainer_password:ro
+volumes:
+  portainer_data:

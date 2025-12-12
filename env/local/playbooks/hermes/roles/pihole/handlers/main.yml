@@ -1,0 +1,3 @@
+---
+- name: restart pihole
+  command: docker restart pihole

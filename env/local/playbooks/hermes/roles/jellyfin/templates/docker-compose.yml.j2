@@ -1,0 +1,16 @@
+---
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+    environment:
+      TZ: '{{ timezone }}'
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - /media:/media
+    devices:
+      - /dev/dri:/dev/dri

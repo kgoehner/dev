@@ -1,0 +1,56 @@
+---
+- name: Install WireGuard
+  apt:
+    name:
+      - wireguard
+      - wireguard-tools
+    state: present
+    update_cache: yes
+
+- name: Enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    reload: yes
+
+- name: Create WireGuard config directory
+  file:
+    path: /etc/wireguard
+    state: directory
+    mode: '0700'
+
+- name: Check if server private key exists
+  stat:
+    path: /etc/wireguard/server_private.key
+  register: server_key
+
+- name: Generate server private key
+  shell: wg genkey > /etc/wireguard/server_private.key
+  when: not server_key.stat.exists
+
+- name: Set server private key permissions
+  file:
+    path: /etc/wireguard/server_private.key
+    mode: '0600'
+
+- name: Generate server public key
+  shell: cat /etc/wireguard/server_private.key | wg pubkey > /etc/wireguard/server_public.key
+  when: not server_key.stat.exists
+
+- name: Read server private key
+  slurp:
+    src: /etc/wireguard/server_private.key
+  register: server_private_key
+
+- name: Deploy WireGuard config
+  template:
+    src: wg0.conf.j2
+    dest: /etc/wireguard/wg0.conf
+    mode: '0600'
+
+- name: Enable and start WireGuard
+  systemd:
+    name: wg-quick@wg0
+    enabled: yes
+    state: started

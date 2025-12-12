@@ -1,0 +1,51 @@
+---
+- name: Install restic
+  apt:
+    name: restic
+    state: present
+    update_cache: yes
+
+- name: Create restic config directory
+  file:
+    path: /etc/restic
+    state: directory
+    mode: '0700'
+
+- name: Deploy restic environment file
+  template:
+    src: restic-env.j2
+    dest: /etc/restic/env
+    mode: '0600'
+
+- name: Check if repository is initialized
+  shell: |
+    source /etc/restic/env
+    restic snapshots
+  register: repo_check
+  failed_when: false
+  changed_when: false
+
+- name: Initialize restic repository
+  shell: |
+    source /etc/restic/env
+    restic init
+  when: repo_check.rc != 0
+
+- name: Deploy backup script
+  template:
+    src: backup.sh.j2
+    dest: /usr/local/bin/restic-backup
+    mode: '0755'
+
+- name: Create backup log directory
+  file:
+    path: /var/log/restic
+    state: directory
+    mode: '0755'
+
+- name: Setup daily backup cron job
+  cron:
+    name: "Restic daily backup"
+    minute: "0"
+    hour: "2"
+    job: "/usr/local/bin/restic-backup >> /var/log/restic/backup.log 2>&1"

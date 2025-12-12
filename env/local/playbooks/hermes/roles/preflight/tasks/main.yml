@@ -1,0 +1,42 @@
+---
+- name: Check disk space
+  shell: df -h / | awk 'NR==2 {print $5}' | sed 's/%//'
+  register: disk_usage
+  changed_when: false
+
+- name: Fail if disk usage is too high
+  fail:
+    msg: "Disk usage is {{ disk_usage.stdout }}%, need at least 20% free"
+  when: disk_usage.stdout | int > 80
+
+- name: Check available memory
+  shell: free -m | grep Mem | awk '{print $7}'
+  register: available_memory
+  changed_when: false
+
+- name: Fail if memory is too low
+  fail:
+    msg: "Only {{ available_memory.stdout }}MB available, need at least 500MB"
+  when: 
+    - available_memory.stdout != ""
+    - available_memory.stdout | int < 500
+
+- name: Check if ports are already in use
+  wait_for:
+    port: "{{ item }}"
+    state: stopped
+    timeout: 1
+  ignore_errors: yes
+  register: port_check
+  loop:
+    - 9000  # Portainer
+    - 53    # Pi-hole DNS
+    - 8080  # Pi-hole web
+    - 8000  # Paperless
+    - 8096  # Jellyfin
+
+- name: Warn about ports in use
+  debug:
+    msg: "Port {{ item.item }} is already in use"
+  when: item.failed
+  loop: "{{ port_check.results }}"

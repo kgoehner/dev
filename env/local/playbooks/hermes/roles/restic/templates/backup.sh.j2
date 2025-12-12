@@ -1,0 +1,35 @@
+#!/bin/bash
+set -e
+
+source /etc/restic/env
+
+echo "=== Restic Backup Started: $(date) ==="
+
+# Backup paths
+restic backup \
+  /srv/docker/pihole/etc-pihole \
+  /srv/docker/paperless \
+  /srv/docker/jellyfin/config \
+  /srv/docker/portainer \
+  /srv/docker/uptime-kuma \
+  /srv/docker/nginx \
+  /etc/wireguard \
+  /media \
+  --exclude='/media/.Trash*' \
+  --exclude='/media/lost+found' \
+  --tag hermes \
+  --tag automated
+
+# Cleanup old snapshots (keep last 7 daily, 4 weekly, 6 monthly)
+restic forget \
+  --keep-daily 7 \
+  --keep-weekly 4 \
+  --keep-monthly 6 \
+  --prune
+
+echo "=== Restic Backup Completed: $(date) ==="
+
+# Notify Uptime Kuma (if configured)
+{% if kuma_push_url is defined %}
+curl -fsS --retry 3 "{{ kuma_push_url }}" > /dev/null
+{% endif %}
