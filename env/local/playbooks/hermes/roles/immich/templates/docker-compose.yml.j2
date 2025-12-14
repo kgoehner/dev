@@ -1,8 +1,10 @@
 ---
+name: immich
+
 services:
   immich-server:
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:release
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     restart: unless-stopped
     ports:
       - "2283:3001"
@@ -18,11 +20,10 @@ services:
     depends_on:
       - redis
       - database
-    command: ['start.sh', 'immich']
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:release
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     restart: unless-stopped
     volumes:
       - ./model-cache:/cache
@@ -31,16 +32,24 @@ services:
 
   redis:
     container_name: immich_redis
-    image: redis:6.2-alpine
+    image: redis:6.2-alpine@sha256:e3b17ba9479deec4b7d1eeec1548a253acc5374d68d3b27937fcfe4df8d18c7e
     restart: unless-stopped
+    healthcheck:
+      test: redis-cli ping || exit 1
 
   database:
     container_name: immich_postgres
-    image: tensorchord/pgvecto-rs:pg14-v0.2.0
+    image: tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: "{{ vault_immich_db_password }}"
       POSTGRES_USER: postgres
       POSTGRES_DB: immich
+      POSTGRES_INITDB_ARGS: '--data-checksums'
     volumes:
       - ./postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready --dbname='immich' --username='postgres' || exit 1; Chksum="$$(psql --dbname='immich' --username='postgres' --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1
+      interval: 5m
+      start_interval: 30s
+      start_period: 5m

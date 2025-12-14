@@ -1,0 +1,5 @@
+---
+- name: restart prowlarr
+  community.docker.docker_compose_v2:
+    project_src: /srv/docker/prowlarr
+    recreate: always

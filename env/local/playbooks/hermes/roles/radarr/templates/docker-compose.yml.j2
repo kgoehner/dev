@@ -1,0 +1,22 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    ports:
+      - "7878:7878"
+    volumes:
+      - ./config:/config
+      - /media/movies:/movies
+      - /srv/docker/torrenting/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    networks:
+      - arr_network
+
+networks:
+  arr_network:
+    name: prowlarr_arr_network
+    external: true

@@ -11,6 +11,8 @@ services:
     volumes:
       - ./config:/config
       - ./cache:/cache
-      - /media:/media
+      - /media/movies:/data/movies
+      - /media/tv:/data/tv
+      - /media/music:/data/music
     devices:
       - /dev/dri:/dev/dri

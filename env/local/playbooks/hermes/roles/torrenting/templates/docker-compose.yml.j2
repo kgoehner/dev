@@ -17,6 +17,8 @@ services:
       - "8086:8080"  # qBittorrent web UI
     volumes:
       - ./gluetun:/gluetun
+    networks:
+      - arr_network
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -30,6 +32,11 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - ./qbittorrent:/config
-      - /media/downloads:/downloads
+      - ./downloads:/downloads
     depends_on:
       - gluetun
+
+networks:
+  arr_network:
+    name: prowlarr_arr_network
+    external: true

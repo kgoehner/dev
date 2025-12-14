@@ -1,0 +1,22 @@
+services:
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    restart: unless-stopped
+    ports:
+      - "8686:8686"
+    volumes:
+      - ./config:/config
+      - /media/music:/music
+      - /srv/docker/torrenting/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    networks:
+      - arr_network
+
+networks:
+  arr_network:
+    name: prowlarr_arr_network
+    external: true

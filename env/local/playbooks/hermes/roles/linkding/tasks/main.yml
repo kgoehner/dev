@@ -1,0 +1,17 @@
+---
+- name: Create linkding directory
+  file:
+    path: /srv/docker/linkding
+    state: directory
+    mode: '0755'
+
+- name: Create linkding docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/docker/linkding/docker-compose.yml
+  notify: restart linkding
+
+- name: Start linkding container
+  community.docker.docker_compose_v2:
+    project_src: /srv/docker/linkding
+    state: present

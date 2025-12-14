@@ -1,0 +1,22 @@
+---
+- name: Ensure prowlarr network exists
+  community.docker.docker_network:
+    name: prowlarr_arr_network
+  ignore_errors: yes
+
+- name: Create radarr directory
+  file:
+    path: /srv/docker/radarr
+    state: directory
+    mode: '0755'
+
+- name: Create radarr docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/docker/radarr/docker-compose.yml
+  notify: restart radarr
+
+- name: Start radarr container
+  community.docker.docker_compose_v2:
+    project_src: /srv/docker/radarr
+    state: present

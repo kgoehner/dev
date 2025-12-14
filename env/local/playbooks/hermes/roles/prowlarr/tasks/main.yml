@@ -1,0 +1,17 @@
+---
+- name: Create prowlarr directory
+  file:
+    path: /srv/docker/prowlarr
+    state: directory
+    mode: '0755'
+
+- name: Create prowlarr docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/docker/prowlarr/docker-compose.yml
+  notify: restart prowlarr
+
+- name: Start prowlarr container
+  community.docker.docker_compose_v2:
+    project_src: /srv/docker/prowlarr
+    state: present

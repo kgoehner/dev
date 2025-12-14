@@ -1,0 +1,22 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    ports:
+      - "8989:8989"
+    volumes:
+      - ./config:/config
+      - /media/tv:/tv
+      - /srv/docker/torrenting/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    networks:
+      - arr_network
+
+networks:
+  arr_network:
+    name: prowlarr_arr_network
+    external: true

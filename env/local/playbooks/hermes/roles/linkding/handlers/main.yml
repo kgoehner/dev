@@ -1,0 +1,5 @@
+---
+- name: restart linkding
+  community.docker.docker_compose_v2:
+    project_src: /srv/docker/linkding
+    recreate: always

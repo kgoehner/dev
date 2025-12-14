@@ -8,4 +8,8 @@ services:
       - "8087:80"
     volumes:
       - /media:/srv/media
+      - /srv/docker/torrenting/downloads:/srv/downloads
+      - /srv/docker/paperless/consume:/srv/paperless-inbox
+      - /srv/docker/nextcloud/data:/srv/nextcloud
       - ./data:/data
+    user: "1000:1000"

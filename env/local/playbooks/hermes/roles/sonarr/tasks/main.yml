@@ -1,0 +1,22 @@
+---
+- name: Ensure prowlarr network exists
+  community.docker.docker_network:
+    name: prowlarr_arr_network
+  ignore_errors: yes
+
+- name: Create sonarr directory
+  file:
+    path: /srv/docker/sonarr
+    state: directory
+    mode: '0755'
+
+- name: Create sonarr docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/docker/sonarr/docker-compose.yml
+  notify: restart sonarr
+
+- name: Start sonarr container
+  community.docker.docker_compose_v2:
+    project_src: /srv/docker/sonarr
+    state: present

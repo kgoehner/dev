@@ -1,0 +1,22 @@
+---
+- name: Ensure prowlarr network exists
+  community.docker.docker_network:
+    name: prowlarr_arr_network
+  ignore_errors: yes
+
+- name: Create lidarr directory
+  file:
+    path: /srv/docker/lidarr
+    state: directory
+    mode: '0755'
+
+- name: Create lidarr docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/docker/lidarr/docker-compose.yml
+  notify: restart lidarr
+
+- name: Start lidarr container
+  community.docker.docker_compose_v2:
+    project_src: /srv/docker/lidarr
+    state: present

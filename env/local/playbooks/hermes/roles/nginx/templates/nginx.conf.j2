@@ -95,12 +95,92 @@ http {
     }
 
     server {
+        listen 80;
+        server_name jellyfin.hermes.local;
+        location / {
+            proxy_pass http://localhost:8096;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
         listen 443 ssl;
         server_name jellyfin.hermes.local;
         ssl_certificate /etc/nginx/ssl/hermes.crt;
         ssl_certificate_key /etc/nginx/ssl/hermes.key;
         location / {
             proxy_pass http://localhost:8096;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name sonarr.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:8989;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name radarr.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:7878;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name prowlarr.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:9696;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 80;
+        server_name lidarr.hermes.local;
+        location / {
+            proxy_pass http://localhost:8686;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name lidarr.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:8686;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -175,6 +255,20 @@ http {
         client_max_body_size 128M;
         location / {
             proxy_pass http://localhost:8083;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name linkding.hermes.local;
+        ssl_certificate /etc/nginx/ssl/hermes.crt;
+        ssl_certificate_key /etc/nginx/ssl/hermes.key;
+        location / {
+            proxy_pass http://localhost:9091;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

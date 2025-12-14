@@ -17,6 +17,12 @@
     dest: "{{ docker_compose_dir }}/immich/docker-compose.yml"
     mode: '0644'
 
+- name: Deploy Immich .env file
+  template:
+    src: env.j2
+    dest: "{{ docker_compose_dir }}/immich/.env"
+    mode: '0644'
+
 - name: Pull latest Immich images
   community.docker.docker_compose_v2:
     project_src: "{{ docker_compose_dir }}/immich"

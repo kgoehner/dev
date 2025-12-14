@@ -1,4 +1,9 @@
 ---
+- name: Ensure prowlarr network exists
+  community.docker.docker_network:
+    name: prowlarr_arr_network
+  ignore_errors: yes
+
 - name: Create torrenting directory
   file:
     path: "{{ docker_compose_dir }}/torrenting"
