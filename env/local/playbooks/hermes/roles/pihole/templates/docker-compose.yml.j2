@@ -8,6 +8,7 @@ services:
       TZ: '{{ timezone }}'
       WEBPASSWORD: '{{ pihole_webpassword }}'
       VIRTUAL_HOST: 'pihole.hermes.local'
+      FTLCONF_dns_listeningMode: 'BIND'
     ports:
       - "53:53/tcp"
       - "53:53/udp"

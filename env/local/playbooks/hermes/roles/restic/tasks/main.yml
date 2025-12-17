@@ -19,16 +19,20 @@
 
 - name: Check if repository is initialized
   shell: |
-    source /etc/restic/env
+    . /etc/restic/env
     restic snapshots
+  args:
+    executable: /bin/bash
   register: repo_check
   failed_when: false
   changed_when: false
 
 - name: Initialize restic repository
   shell: |
-    source /etc/restic/env
+    . /etc/restic/env
     restic init
+  args:
+    executable: /bin/bash
   when: repo_check.rc != 0
 
 - name: Deploy backup script
@@ -43,9 +47,9 @@
     state: directory
     mode: '0755'
 
-- name: Setup daily backup cron job
+- name: Setup backup cron job every 6 hours
   cron:
-    name: "Restic daily backup"
+    name: "Restic backup every 6 hours"
     minute: "0"
-    hour: "2"
+    hour: "*/6"
     job: "/usr/local/bin/restic-backup >> /var/log/restic/backup.log 2>&1"

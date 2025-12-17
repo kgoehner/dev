@@ -32,7 +32,7 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - ./qbittorrent:/config
-      - ./downloads:/downloads
+      - /mnt/atlas/media/downloads:/downloads
     depends_on:
       - gluetun
 

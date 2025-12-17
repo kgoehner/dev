@@ -1,4 +1,4 @@
-export RESTIC_REPOSITORY="s3:s3.amazonaws.com/{{ restic_s3_bucket }}"
+export RESTIC_REPOSITORY="s3:s3.amazonaws.com/{{ restic_s3_bucket }}/hermes"
 export RESTIC_PASSWORD="{{ vault_restic_password }}"
 export AWS_ACCESS_KEY_ID="{{ vault_aws_access_key }}"
 export AWS_SECRET_ACCESS_KEY="{{ vault_aws_secret_key }}"

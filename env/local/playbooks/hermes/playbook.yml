@@ -7,9 +7,12 @@
     docker_compose_dir: /srv/docker
     timezone: America/New_York
     pihole_webpassword: "{{ vault_pihole_password }}"
+    restic_s3_bucket: goehner-homelab-backup
+    restic_aws_region: us-east-1
   roles:
     - { role: preflight, tags: ['core', 'infrastructure'] }
     - { role: docker, tags: ['core', 'infrastructure'] }
+    - { role: nfs-mounts, tags: ['storage', 'nfs'] }
     - { role: portainer, tags: ['core', 'infrastructure'] }
     - { role: pihole, tags: ['core', 'infrastructure', 'dns'] }
     - { role: paperless, tags: ['productivity'] }
@@ -29,4 +32,4 @@
     - { role: homer, tags: ['core', 'dashboard'] }
     - { role: wireguard, tags: ['security', 'vpn'] }
     - { role: nginx, tags: ['core', 'infrastructure', 'proxy'] }
-    # - restic
+    - { role: restic, tags: ['backup'] }
