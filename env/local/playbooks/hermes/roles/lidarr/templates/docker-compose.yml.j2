@@ -7,8 +7,8 @@ services:
       - "8686:8686"
     volumes:
       - ./config:/config
-      - /media/music:/music
-      - /srv/docker/torrenting/downloads:/downloads
+      - /mnt/atlas/media/music:/music
+      - /mnt/atlas/media/downloads:/downloads
     environment:
       - PUID=1000
       - PGID=1000
