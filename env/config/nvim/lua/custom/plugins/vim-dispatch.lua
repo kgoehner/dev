@@ -1,1 +1,1 @@
-return { "tpope/vim-dispatch" }
+vim.pack.add({ 'https://github.com/tpope/vim-dispatch' }, { load = true })

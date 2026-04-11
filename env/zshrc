@@ -108,7 +108,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 source $HOME/.zshrc.pre-oh-my-zsh
-source $HOME/.zshrc.amzn
+# source $HOME/.zshrc.amzn
 
 # if you wish to use IMDS set AWS_EC2_METADATA_DISABLED=false
 

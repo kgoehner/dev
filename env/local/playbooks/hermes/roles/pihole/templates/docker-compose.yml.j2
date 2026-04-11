@@ -7,7 +7,7 @@ services:
     environment:
       TZ: '{{ timezone }}'
       WEBPASSWORD: '{{ pihole_webpassword }}'
-      VIRTUAL_HOST: 'pihole.hermes.local'
+      VIRTUAL_HOST: 'pihole.hermes.home'
       FTLCONF_dns_listeningMode: 'BIND'
     ports:
       - "53:53/tcp"

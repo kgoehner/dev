@@ -5,17 +5,10 @@ PrivateKey = {{ server_private_key.content | b64decode | trim }}
 PostUp = iptables -I FORWARD 1 -i wg0 -j ACCEPT; iptables -I FORWARD 2 -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; iptables -t nat -A POSTROUTING -s 10.13.13.0/24 -d 192.168.5.0/24 -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -D FORWARD -o wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; iptables -t nat -D POSTROUTING -s 10.13.13.0/24 -d 192.168.5.0/24 -j MASQUERADE
 
-# Example client configuration:
-# [Interface]
-# PrivateKey = <client_private_key>
-# Address = 10.13.13.2/32
-# DNS = 192.168.5.100
-#
-# [Peer]
-# PublicKey = <server_public_key>
-# Endpoint = <your_external_ip>:51820
-# AllowedIPs = 10.13.13.0/24, 192.168.5.0/24
-# PersistentKeepalive = 25
+[Peer] # phone
+PublicKey = a3ANsSOZjP4KFSMux3j88KjA5BG5TIJtMEAVRq/uMzA=
+AllowedIPs = 10.13.13.2/32
 
-# Add client peers here with:
-# wg set wg0 peer <client_public_key> allowed-ips 10.13.13.X/32
+[Peer] # laptop
+PublicKey = TsH/u2zmHLEtFAu2dYPzV3aPQiaiPqqgd9Xd1aJunR0=
+AllowedIPs = 10.13.13.3/32

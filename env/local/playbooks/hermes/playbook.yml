@@ -17,6 +17,7 @@
     - { role: pihole, tags: ['core', 'infrastructure', 'dns'] }
     - { role: paperless, tags: ['productivity'] }
     - { role: jellyfin, tags: ['media'] }
+    - { role: jellyseerr, tags: ['media'] }
     - { role: prowlarr, tags: ['media', 'torrenting'] }
     - { role: sonarr, tags: ['media', 'torrenting'] }
     - { role: radarr, tags: ['media', 'torrenting'] }
@@ -24,7 +25,7 @@
     - { role: nextcloud, tags: ['productivity'] }
     - { role: torrenting, tags: ['media', 'torrenting-core'] }
     - { role: filebrowser, tags: ['media', 'files'] }
-    - { role: immich, tags: ['media', 'photos'] }
+    # - { role: immich, tags: ['media', 'photos'] }  # Disabled - too resource intensive
     - { role: bitwarden, tags: ['security'] }
     - { role: linkding, tags: ['productivity'] }
     - { role: uptime-kuma, tags: ['core', 'monitoring'] }

@@ -1,6 +1,2 @@
-return {
-  "zk-org/zk-nvim",
-  config = function()
-    require("zk").setup({})
-  end
-}
+vim.pack.add({ 'https://github.com/zk-org/zk-nvim' }, { load = true })
+require('zk').setup({})

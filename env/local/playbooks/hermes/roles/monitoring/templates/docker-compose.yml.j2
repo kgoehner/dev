@@ -43,7 +43,7 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
 
   cadvisor:
-    image: ghcr.io/google/cadvisor:v0.53.0
+    image: ghcr.io/google/cadvisor:0.55
     container_name: cadvisor
     restart: unless-stopped
     ports:

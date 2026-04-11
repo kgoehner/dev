@@ -232,130 +232,49 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- [[ Install `lazy.nvim` plugin manager ]]
---    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
-  if vim.v.shell_error ~= 0 then
-    error('Error cloning lazy.nvim:\n' .. out)
-  end
-end ---@diagnostic disable-next-line: undefined-field
-vim.opt.rtp:prepend(lazypath)
-
--- [[ Configure and install plugins ]]
+-- [[ Load plugins via vim.pack ]]
 --
---  To check the current status of your plugins, run
---    :Lazy
+--  To install/update plugins, run:
+--    :lua vim.pack.update()
 --
---  You can press `?` in this menu for help. Use `:q` to close the window
+--  To remove a deleted plugin from disk:
+--    :lua vim.pack.del()
 --
---  To update plugins you can run
---    :Lazy update
+--  To check health:
+--    :checkhealth vim.pack
 --
--- NOTE: Here is where you install your plugins.
-require("lazy").setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
+-- Helper: install + immediately load so require() works during startup
+local plug = function(specs, opts)
+  vim.pack.add(specs, vim.tbl_extend('force', { load = true }, opts or {}))
+end
 
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to force a plugin to be loaded.
-  --
-  -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
-  --
-  -- This is often very useful to both group configuration, as well as handle
-  -- lazy loading plugins that don't need to be loaded immediately at startup.
-  --
-  -- For example, in the following configuration, we use:
-  --  event = 'VimEnter'
-  --
-  -- which loads which-key before all the UI elements are loaded. Events can be
-  -- normal autocommands events (`:help autocmd-events`).
-  --
-  -- Then, because we use the `config` key, the configuration only runs
-  -- after the plugin has been loaded:
-  --  config = function() ... end
+plug({ 'https://github.com/tpope/vim-sleuth' }) -- Detect tabstop and shiftwidth automatically
 
-    { -- Useful plugin to show you pending keybinds.
-    'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    opts = {
-      icons = {
-        -- set icon mappings to true if you have a Nerd Font
-        mappings = vim.g.have_nerd_font,
-        -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
-        -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
-        keys = vim.g.have_nerd_font and {} or {
-          Up = '<Up> ',
-          Down = '<Down> ',
-          Left = '<Left> ',
-          Right = '<Right> ',
-          C = '<C-…> ',
-          M = '<M-…> ',
-          D = '<D-…> ',
-          S = '<S-…> ',
-          CR = '<CR> ',
-          Esc = '<Esc> ',
-          ScrollWheelDown = '<ScrollWheelDown> ',
-          ScrollWheelUp = '<ScrollWheelUp> ',
-          NL = '<NL> ',
-          BS = '<BS> ',
-          Space = '<Space> ',
-          Tab = '<Tab> ',
-          F1 = '<F1>',
-          F2 = '<F2>',
-          F3 = '<F3>',
-          F4 = '<F4>',
-          F5 = '<F5>',
-          F6 = '<F6>',
-          F7 = '<F7>',
-          F8 = '<F8>',
-          F9 = '<F9>',
-          F10 = '<F10>',
-          F11 = '<F11>',
-          F12 = '<F12>',
-        },
-      },
+-- Load colorscheme early so UI renders correctly on startup
+require('custom.plugins.gruvbox')
 
-      -- Document existing key chains
-      spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
-        { '<leader>d', group = '[D]ocument' },
-        { '<leader>r', group = '[R]ename' },
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      },
-    },
-  },
-
-  { import = "custom.plugins" },
-}, {
-    ui = {
-      -- If you are using a Nerd Font: set icons to an empty table which will use the
-      -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-      icons = vim.g.have_nerd_font and {} or {
-        cmd = "⌘",
-        config = "🛠",
-        event = "📅",
-        ft = "📂",
-        init = "⚙",
-        keys = "🗝",
-        plugin = "🔌",
-        runtime = "💻",
-        require = "🌙",
-        source = "📄",
-        start = "🚀",
-        task = "📌",
-        lazy = "💤 ",
-      },
-    },
-  })
+require('custom.plugins.mini')
+require('custom.plugins.which-key')
+require('custom.plugins.gitsigns')      -- load before snacks (snacks uses gitsigns)
+require('custom.plugins.snacks')
+require('custom.plugins.autocomplete')  -- blink.cmp must be loaded before lsp
+require('custom.plugins.lsp')
+require('custom.plugins.treesitter')
+require('custom.plugins.fzf')
+require('custom.plugins.oil')
+require('custom.plugins.harpoon')
+require('custom.plugins.trouble')
+require('custom.plugins.todo')
+require('custom.plugins.comment')
+require('custom.plugins.autopairs')
+require('custom.plugins.undotree')
+require('custom.plugins.vim-fugitive')
+require('custom.plugins.vim-dispatch')
+require('custom.plugins.dap')
+require('custom.plugins.zk-nvim')
+require('custom.plugins.vim-be-good')
+require('custom.plugins.vim-be-better')
+require('custom.plugins.brazil-config')
 
 
 require("keymaps")

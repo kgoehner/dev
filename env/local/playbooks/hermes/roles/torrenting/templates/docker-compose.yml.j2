@@ -13,6 +13,7 @@ services:
       - WIREGUARD_PRESHARED_KEY={{ vault_vpn_preshared_key }}
       - WIREGUARD_ADDRESSES={{ vault_vpn_addresses }}
       - SERVER_COUNTRIES={{ vault_vpn_countries }}
+      - FIREWALL_VPN_INPUT_PORTS=11790
     ports:
       - "8086:8080"  # qBittorrent web UI
     volumes:

@@ -1,17 +1,10 @@
-local work = require("utils.work")
+local work = require('utils.work')
 
-if not work.is_work_machine() then return {} end
+if not work.is_work_machine() then return end
 
-return {
-  url = "ssh://git.amazon.com/pkg/NinjaHooks",
-  branch = "mainline",
-  -- This magic setup is copied from https://github.com/folke/lazy.nvim/issues/183#issuecomment-1376469054
-  ft = "brazil-config",
-  config = function(plugin)
-    vim.opt.rtp:prepend(plugin.dir .. "/configuration/vim/amazon/brazil-config")
-    require("lazy.core.loader").packadd(plugin.dir .. "/configuration/vim/amazon/brazil-config")
-  end,
-  init = function(plugin)
-    require("lazy.core.loader").ftdetect(plugin.dir .. "/configuration/vim/amazon/brazil-config")
-  end,
-}
+vim.pack.add({ { src = 'ssh://git.amazon.com/pkg/NinjaHooks', version = 'mainline', name = 'NinjaHooks' } }, { load = true })
+local brazil_path = vim.fn.stdpath('data') .. '/site/pack/core/opt/NinjaHooks/configuration/vim/amazon/brazil-config'
+vim.opt.rtp:prepend(brazil_path)
+vim.cmd('runtime! ' .. brazil_path .. '/ftdetect/*.vim')
+vim.cmd('runtime! ' .. brazil_path .. '/plugin/*.vim')
+vim.cmd('runtime! ' .. brazil_path .. '/plugin/*.lua')

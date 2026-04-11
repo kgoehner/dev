@@ -1,17 +1,17 @@
 ---
 - name: Create uptime-kuma directory
   file:
-    path: /opt/uptime-kuma
+    path: "{{ docker_compose_dir }}/uptime-kuma"
     state: directory
     mode: '0755'
 
 - name: Deploy uptime-kuma docker-compose
   template:
     src: docker-compose.yml.j2
-    dest: /opt/uptime-kuma/docker-compose.yml
+    dest: "{{ docker_compose_dir }}/uptime-kuma/docker-compose.yml"
     mode: '0644'
 
 - name: Start uptime-kuma
   community.docker.docker_compose_v2:
-    project_src: /opt/uptime-kuma
+    project_src: "{{ docker_compose_dir }}/uptime-kuma"
     state: present

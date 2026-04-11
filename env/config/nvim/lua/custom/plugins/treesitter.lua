@@ -1,24 +1,15 @@
-return {
-  "nvim-treesitter/nvim-treesitter",
-  build = ':TSUpdate',
-  main = 'nvim-treesitter.configs',
-  -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  opts = {
-    ensure_installed = { 'bash', 'c', 'cpp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'rust', 'python', 'json', 'cmake', 'dockerfile', 'dot', 'go', 'java', 'latex', 'regex', 'toml', 'javascript', 'typescript' },
-    auto_install = true,
-    highlight = {
-      enable = true,
-      -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-      --  If you are experiencing weird indenting issues, add the language to
-      --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-      additional_vim_regex_highlighting = { 'ruby' },
-    },
-    indent = { enable = true, disable = { 'ruby' } },
-  },
-  -- There are additional nvim-treesitter modules that you can use to interact
-  -- with nvim-treesitter. You should go explore a few and see what interests you:
-  --
-  --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-  --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-  --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-}
+vim.pack.add({ 'https://github.com/nvim-treesitter/nvim-treesitter' }, { load = true })
+-- [[ Configure Treesitter ]]
+-- nvim-treesitter v1 is a parser manager; highlighting is built into nvim 0.12
+-- Use :TSInstall <lang> / :TSUpdate to manage parsers
+require('nvim-treesitter').setup()
+
+-- Enable treesitter-based highlighting and indentation for all filetypes
+vim.api.nvim_create_autocmd('FileType', {
+  callback = function(ev)
+    local ok = pcall(vim.treesitter.start, ev.buf)
+    if ok then
+      vim.bo[ev.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+    end
+  end,
+})

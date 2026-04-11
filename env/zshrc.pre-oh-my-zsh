@@ -11,8 +11,19 @@ alias ll="ls -la"
 # Todo
 alias todo=todo.sh
 
-# Notebook
-export ZK_NOTEBOOK_DIR=$HOME/Documents/notes/personal/
+# ZK Notebook
+# export ZK_NOTEBOOK_DIR_LOCAL=$HOME/Documents/notes/personal/
+export ZK_NOTEBOOK_DIR=/Volumes/documents/kyle/notes
+
+# Function to ensure atlas is mounted before using zk
+zk() {
+    if ! mount | grep -q "atlas._smb._tcp.local"; then
+        echo "Mounting atlas..."
+        open "smb://atlas._smb._tcp.local/documents" 2>/dev/null || \
+        osascript -e 'mount volume "smb://atlas._smb._tcp.local/documents"'
+    fi
+    command zk "$@"
+}
 
 # Set up rtx for runtime management
 eval "$(mise activate zsh)"

@@ -138,38 +138,37 @@ docker compose restart
 
 Access these URLs from your local network (requires Pi-hole as DNS):
 
-- **Homepage**: http://hermes.local
-- **Portainer**: http://portainer.hermes.local
-- **Pi-hole**: http://pihole.hermes.local:8080/admin
-- **Paperless**: http://paperless.hermes.local
-- **Jellyfin**: http://jellyfin.hermes.local
-- **Nextcloud**: http://nextcloud.hermes.local
-- **Bitwarden**: http://bitwarden.hermes.local
-- **Uptime Kuma**: http://kuma.hermes.local
+- **Homepage**: http://hermes.home
+- **Portainer**: http://portainer.hermes.home
+- **Pi-hole**: http://pihole.hermes.home:8080/admin
+- **Paperless**: http://paperless.hermes.home
+- **Jellyfin**: http://jellyfin.hermes.home
+- **Nextcloud**: http://nextcloud.hermes.home
+- **Bitwarden**: http://bitwarden.hermes.home
+- **Uptime Kuma**: http://kuma.hermes.home
 
 ## DNS Configuration
 
-Pi-hole automatically configures local DNS for all `.hermes.local` domains. Set your devices to use the Pi's IP (192.168.5.100) as their DNS server.
+Pi-hole automatically configures local DNS for all `.hermes.home` domains. Set your devices to use the Pi's IP (192.168.5.100) as their DNS server.
 
 ## Media Storage
 
-Jellyfin media is stored at `/media` on the server. Organize as:
-- `/media/movies`
-- `/media/tv`
-- `/media/music`
+Jellyfin media is stored at `/mnt/atlas/media` on the server. Organize as:
+- `/mnt/atlas/media/videos`
+- `/mnt/atlas/media/music`
 
 ### Mount Network Share (Optional)
 
 **NFS:**
 ```bash
 sudo apt install nfs-common
-sudo mount -t nfs 192.168.5.10:/share/media /media
+sudo mount -t nfs 192.168.5.10:/share/media /mnt/atlas/media
 ```
 
 **SMB/CIFS:**
 ```bash
 sudo apt install cifs-utils
-sudo mount -t cifs //192.168.5.10/media /media -o username=user,password=pass
+sudo mount -t cifs //192.168.5.10/media /mnt/atlas/media -o username=user,password=pass
 ```
 
 Add to `/etc/fstab` for persistent mounts.
@@ -179,10 +178,10 @@ Add to `/etc/fstab` for persistent mounts.
 Uptime Kuma monitors all services. Configure monitors in the web UI:
 
 **HTTP Monitors:**
-- Jellyfin: http://jellyfin.hermes.local
-- Paperless: http://paperless.hermes.local
-- Portainer: http://portainer.hermes.local
-- Pi-hole: http://pihole.hermes.local:8080/admin
+- Jellyfin: http://jellyfin.hermes.home
+- Paperless: http://paperless.hermes.home
+- Portainer: http://portainer.hermes.home
+- Pi-hole: http://pihole.hermes.home:8080/admin
 
 **Docker Container Monitors:**
 - Container names: `jellyfin`, `pihole`, `paperless-webserver`, `portainer`, `uptime-kuma`

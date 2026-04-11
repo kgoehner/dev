@@ -25,7 +25,7 @@ services:
       MYSQL_PASSWORD: "{{ vault_nextcloud_db_password }}"
       NEXTCLOUD_ADMIN_USER: "{{ vault_nextcloud_admin_user }}"
       NEXTCLOUD_ADMIN_PASSWORD: "{{ vault_nextcloud_admin_password }}"
-      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.hermes.local localhost"
+      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.hermes.home localhost"
     volumes:
       - ./data:/var/www/html
     depends_on:

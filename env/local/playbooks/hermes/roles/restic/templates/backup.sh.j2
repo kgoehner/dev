@@ -37,5 +37,5 @@ echo "=== Restic Backup Completed: $(date) ==="
 
 # Notify Uptime Kuma (if configured)
 {% if kuma_push_url is defined %}
-curl -fsS --retry 3 "{{ kuma_push_url }}" > /dev/null
+curl -fsS --insecure --retry 3 "{{ kuma_push_url }}" > /dev/null
 {% endif %}

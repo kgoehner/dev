@@ -1,19 +1,12 @@
-return {
-	'saghen/blink.cmp',
-	-- optional: provides snippets for the snippet source
-	dependencies = 'rafamadriz/friendly-snippets',
+vim.pack.add({ 'https://github.com/rafamadriz/friendly-snippets' }, { load = true })
+vim.pack.add({ { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.*') } }, { load = true })
 
-	version = 'v0.*',
-
-	---@module 'blink.cmp'
-	---@type blink.cmp.Config
-	opts = {
-		keymap = { preset = 'default' },
-
-		appearance = {
-			use_nvim_cmp_as_default = true,
-			nerd_font_variant = 'mono'
-		},
-		signature = { enabled = true }
-	}
-}
+---@module 'blink.cmp'
+---@type blink.cmp.Config
+require('blink.cmp').setup({
+  keymap = { preset = 'default' },
+  appearance = {
+    nerd_font_variant = 'mono',
+  },
+  signature = { enabled = true },
+})

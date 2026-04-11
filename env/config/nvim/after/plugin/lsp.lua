@@ -1,4 +1,4 @@
-# Add Bemol workspaces to LSP
+-- Add Bemol workspaces to LSP
 local function bemol()
   local bemol_dir = vim.fs.find({ '.bemol' }, { upward = true, type = 'directory'})[1]
   local ws_folders_lsp = {}

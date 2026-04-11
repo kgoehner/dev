@@ -9,13 +9,13 @@ services:
     environment:
       PAPERLESS_TIME_ZONE: '{{ timezone }}'
       PAPERLESS_REDIS: redis://redis:6379
-      PAPERLESS_ALLOWED_HOSTS: paperless.hermes.local,192.168.5.100
-      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.hermes.local,https://paperless.hermes.local,http://192.168.5.100:8000
-      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.hermes.local,https://paperless.hermes.local,http://192.168.5.100:8000
+      PAPERLESS_ALLOWED_HOSTS: paperless.hermes.home,192.168.5.100
+      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.hermes.home,https://paperless.hermes.home,http://192.168.5.100:8000
+      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.hermes.home,https://paperless.hermes.home,http://192.168.5.100:8000
     volumes:
       - ./data:/usr/src/paperless/data
-      - ./media:/usr/src/paperless/media
-      - ./export:/usr/src/paperless/export
+      - /mnt/atlas/documents/paperless:/usr/src/paperless/media
+      - /mnt/atlas/documents/paperless-export:/usr/src/paperless/export
       - ./consume:/usr/src/paperless/consume
     depends_on:
       - redis
