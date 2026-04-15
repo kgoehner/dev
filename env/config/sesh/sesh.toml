@@ -1,3 +1,8 @@
 [[wildcard]]
 pattern = "~/workspaces/**"
-startup_command = "git status && git log --oneline --graph -5; tmux new-window -c \"$PWD\" 'nvim'; tmux new-window -c \"$PWD\" 'claude-msp'; tmux select-window -t :1"
+startup_command = "git status && git log --oneline --graph -5; tmux new-window -c \"$PWD\" \"$(which nvim 2>/dev/null || which vim)\"; tmux new-window -c \"$PWD\" 'claude-msp'; tmux select-window -t :1"
+
+[[session]]
+name = "Downloads"
+path = "~/Downloads"
+startup_command = "yazi"

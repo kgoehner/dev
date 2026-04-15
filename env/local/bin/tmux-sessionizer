@@ -6,6 +6,7 @@ else
     selected=$(
         (
             sesh list -t
+            sesh list -c
             sesh list -z | while read -r dir; do
                 [[ -d "${dir/#\~/$HOME}/.git" ]] && echo "$dir"
             done
