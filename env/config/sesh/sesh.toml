@@ -1,0 +1,3 @@
+[[wildcard]]
+pattern = "~/workspaces/**"
+startup_command = "git status && git log --oneline --graph -5; tmux new-window -c \"$PWD\" 'nvim'; tmux new-window -c \"$PWD\" 'claude-msp'; tmux select-window -t :1"

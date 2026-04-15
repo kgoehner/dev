@@ -1,37 +1,20 @@
 #!/usr/bin/env bash
-set -x
-
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    workprefix="workplaces"
-else
-    workprefix="workspaces"
-fi
 
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/repos ~/${workprefix}/*/src ~/${workprefix}/*/*/ ~/${workprefix}/*/*/src ~/${workprefix}/*/*/*/src -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(
+        (
+            sesh list -t
+            sesh list -z | while read -r dir; do
+                [[ -d "${dir/#\~/$HOME}/.git" ]] && echo "$dir"
+            done
+        ) | fzf
+    )
 fi
 
 if [[ -z $selected ]]; then
     exit 0
 fi
 
-selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
-
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s $selected_name -c $selected
-    exit 0
-fi
-
-if ! tmux has-session -t=$selected_name 2> /dev/null; then
-    tmux new-session -ds $selected_name -c $selected
-fi
-
-if [[ -z $TMUX ]] && [[ $tmux_running ]]; then
-    tmux attach -t $selected_name
-    exit 0
-fi
-
-tmux switch-client -t $selected_name
+sesh connect "$selected"
