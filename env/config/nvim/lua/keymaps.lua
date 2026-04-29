@@ -12,3 +12,6 @@ vim.keymap.set('n', '<leader>yp', ":let @+ = expand('%:p')<CR>", { desc = 'Yank 
 
 -- Yank relative path to system clipboard
 vim.keymap.set('n', '<leader>yr', ":let @+ = expand('%')<CR>", { desc = 'Yank relative path' })
+
+-- Yank filename to system clipboard
+vim.keymap.set('n', '<leader>yn', ":let @+ = expand('%:t')<CR>", { desc = 'Yank filename' })
